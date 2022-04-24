@@ -27,15 +27,132 @@ var Calendar = Calendar || (function() {
         };
     },
     
-    setAlarmDefaults = function() {
-        state.Alarm = {
+    setAlarm1Defaults = function() {
+        state.Alarm1 = {
             now: {
                 day: 1,
                 month: "",
                 year: 1486,
                 hour: 1,
                 minute: 1,
-                title: ""
+                title: "",
+            },
+        };  
+    },
+    
+    setAlarm2Defaults = function() {
+        state.Alarm2 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm3Defaults = function() {
+        state.Alarm3 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm4Defaults = function() {
+        state.Alarm4 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm5Defaults = function() {
+        state.Alarm5 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm6Defaults = function() {
+        state.Alarm6 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm7Defaults = function() {
+        state.Alarm7 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm8Defaults = function() {
+        state.Alarm8 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm9Defaults = function() {
+        state.Alarm9 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
+            },
+        };
+    },
+    
+    setAlarm10Defaults = function() {
+        state.Alarm10 = {
+            now: {
+                day: 1,
+                month: "",
+                year: 1486,
+                hour: 1,
+                minute: 1,
+                title: "",
             },
         };
     },
@@ -51,58 +168,157 @@ var Calendar = Calendar || (function() {
 		    switch(args[0]) {
 		        case '!cal':
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!setday':
                     getordinal(msg);
                     weather();
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!setmonth':
                     getordinal(msg);
                     weather();
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!setyear':
                     state.Calendar.now.year=args[1];
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!addday':
                     addday(args[1]);
                     weather();
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!sethour':
                     state.Calendar.now.hour=args[1];
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!setminute':
                     state.Calendar.now.minute=args[1];
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!advtime':
                     advtime(args[1],args[2]);
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!setalarm':
-                    setalarm(args[1],args[2],args[3],args[4],args[5],args[6]);
-                    chkalarm();
+                    setalarm(args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!weather':
                     weather();
                     calmenu();
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
                 case '!playercal':
                     showcal(msg);
-                    chkalarm();
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
                     break;
     	    }
 		}else if(args[0]=='!cal'){
@@ -140,7 +356,7 @@ var Calendar = Calendar || (function() {
             '<br><br>Moon: ' + moon + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!advtime,?{Format of Time?|Short Rest|Long Rest|Days|Months|Years},?{Amount?|5}">Advance the Time</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!weather">Roll Weather</a></div>' + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!setalarm,?{Day?|5},?{Month?|Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasias|Eleint|Marpenoth|Uktar|Nightal},?{Year?|1486},?{Hour?|5},?{Minute?|5},?{Title?|1}">Set an Alarm</a></div>' + //--
+            '<div style="text-align:center;"><a ' + astyle2 + '" href="!setalarm,?{Alarmnumber?|Alarm1|Alarm2|Alarm3|Alarm4|Alarm5|Alarm6|Alarm7|Alarm8|Alarm9|Alarm10},?{Day?|5},?{Month?|Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasias|Eleint|Marpenoth|Uktar|Nightal},?{Year?|1486},?{Hour?|5},?{Minute?|5},?{Title?|1}">Set an Alarm</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!playercal">Show to Players</a></div>' + //--
             '</div>'
         );
@@ -581,22 +797,22 @@ var Calendar = Calendar || (function() {
         }
     },
     
-    setalarm = function(tday,tmonth,tyear,thour,tminute,ttitle) {
-        var day=tday;
-        var month=tmonth;
-        var year=tyear;
-        var hour=thour;
-        var minute=tminute;
-        var title=ttitle;
+    setalarm = function(anum,tday,tmonth,tyear,thour,tminute,ttitle) {
+        var day=Number(tday);
+        var month=String(tmonth);
+        var year=Number(tyear);
+        var hour=Number(thour);
+        var minute=Number(tminute);
+        var title=String(ttitle);
         var maxday;
         var rday=0;
+        var num=anum;
         if (Number(hour)<10) {
             hour=`0${hour}`;
         }
         if (Number(minute)<10) {
             minute=`0${minute}`;
         }
-        
         switch (month) {
             case 'Hammer':
                 maxday=31;
@@ -632,11 +848,10 @@ var Calendar = Calendar || (function() {
                 maxday=30;
                 break;
         }
-        
+        sendChat("Calendar",`/w gm Your Alarm >>${title}<< has been set for Day ${day} of ${month} of the Year ${year} at ${hour}:${minute}`);
         if (day>maxday) {
             sendChat("Calendar","/w gm Error with the Input. The chosen month only has "+maxday+" days!");
         } else {
-            sendChat("Calendar",`/w gm Your Alarm >>${title}<< has been set for Day ${day} of ${month} of the Year ${year} at ${hour}:${minute}`);
             
             if (month!="Hammer") {
                 rday=Number(day)+31;
@@ -674,21 +889,195 @@ var Calendar = Calendar || (function() {
                     }
                 }
             }
-            state.Alarm.now.day=Number(rday);
-            state.Alarm.now.month=month;
-            state.Alarm.now.year=Number(year);
-            state.Alarm.now.hour=Number(hour);
-            state.Alarm.now.minute=Number(minute);
-            state.Alarm.now.title=title;
+            if (num=="Alarm1") {
+                state.Alarm1.now.day=Number(rday);
+                state.Alarm1.now.month=month;
+                state.Alarm1.now.year=Number(year);
+                state.Alarm1.now.hour=Number(hour);
+                state.Alarm1.now.minute=Number(minute);
+                state.Alarm1.now.title=title;
+                
+            } else if (num=="Alarm2") {
+                state.Alarm2.now.day=Number(rday);
+                state.Alarm2.now.month=month;
+                state.Alarm2.now.year=Number(year);
+                state.Alarm2.now.hour=Number(hour);
+                state.Alarm2.now.minute=Number(minute);
+                state.Alarm2.now.title=title;
+            } else if (num=="Alarm3") {
+                state.Alarm3.now.day=Number(rday);
+                state.Alarm3.now.month=month;
+                state.Alarm3.now.year=Number(year);
+                state.Alarm3.now.hour=Number(hour);
+                state.Alarm3.now.minute=Number(minute);
+                state.Alarm3.now.title=title;
+            } else if (num=="Alarm4") {
+                state.Alarm4.now.day=Number(rday);
+                state.Alarm4.now.month=month;
+                state.Alarm4.now.year=Number(year);
+                state.Alarm4.now.hour=Number(hour);
+                state.Alarm4.now.minute=Number(minute);
+                state.Alarm4.now.title=title;
+            } else if (num=="Alarm5") {
+                state.Alarm5.now.day=Number(rday);
+                state.Alarm5.now.month=month;
+                state.Alarm5.now.year=Number(year);
+                state.Alarm5.now.hour=Number(hour);
+                state.Alarm5.now.minute=Number(minute);
+                state.Alarm5.now.title=title;
+            } else if (num=="Alarm6") {
+                state.Alarm6.now.day=Number(rday);
+                state.Alarm6.now.month=month;
+                state.Alarm6.now.year=Number(year);
+                state.Alarm6.now.hour=Number(hour);
+                state.Alarm6.now.minute=Number(minute);
+                state.Alarm6.now.title=title;
+            } else if (num=="Alarm7") {
+                state.Alarm7.now.day=Number(rday);
+                state.Alarm7.now.month=month;
+                state.Alarm7.now.year=Number(year);
+                state.Alarm7.now.hour=Number(hour);
+                state.Alarm7.now.minute=Number(minute);
+                state.Alarm7.now.title=title;
+            } else if (num=="Alarm8") {
+                state.Alarm8.now.day=Number(rday);
+                state.Alarm8.now.month=month;
+                state.Alarm8.now.year=Number(year);
+                state.Alarm8.now.hour=Number(hour);
+                state.Alarm8.now.minute=Number(minute);
+                state.Alarm8.now.title=title;
+            } else if (num=="Alarm9") {
+                state.Alarm9.now.day=Number(rday);
+                state.Alarm9.now.month=month;
+                state.Alarm9.now.year=Number(year);
+                state.Alarm9.now.hour=Number(hour);
+                state.Alarm9.now.minute=Number(minute);
+                state.Alarm9.now.title=title;
+            } else if (num=="Alarm10") {
+                state.Alarm10.now.day=Number(rday);
+                state.Alarm10.now.month=month;
+                state.Alarm10.now.year=Number(year);
+                state.Alarm10.now.hour=Number(hour);
+                state.Alarm10.now.minute=Number(minute);
+                state.Alarm10.now.title=title;
+            }
         }
     },
     
-    chkalarm = function() {
-        if (Number(state.Calendar.now.year)==Number(state.Alarm.now.year)) {
-            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm.now.minute)) {
-                       sendChat("Calendar",`/w gm Alarm >>${state.Alarm.now.title}<< triggered!`);
+    chkalarm1 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm1.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm1.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm1.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm1.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm1.now.title}<< triggered!`);
+                    }
+                }
+            }
+        } 
+    },
+    
+    chkalarm2 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm2.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm2.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm2.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm2.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm2.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm3 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm3.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm3.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm3.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm3.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm3.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm4 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm4.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm4.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm4.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm4.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm4.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm5 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm5.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm5.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm5.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm5.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm5.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm6 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm6.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm6.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm6.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm6.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm6.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm7 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm7.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm7.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm7.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm7.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm7.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm8 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm8.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm8.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm8.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm8.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm8.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm9 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm9.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm9.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm9.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm9.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm9.now.title}<< triggered!`);
+                    }
+                }
+            }
+        }
+    },
+    
+    chkalarm10 = function() {
+        if (Number(state.Calendar.now.year)==Number(state.Alarm10.now.year)) {
+            if (Number(state.Calendar.now.ordinal)==Number(state.Alarm10.now.day)) {
+                if (Number(state.Calendar.now.hour)==Number(state.Alarm10.now.hour)) {
+                    if (Number(state.Calendar.now.minute)==Number(state.Alarm10.now.minute)) {
+                        sendChat("Calendar",`/w gm Alarm >>${state.Alarm10.now.title}<< triggered!`);
                     }
                 }
             }
@@ -700,8 +1089,35 @@ var Calendar = Calendar || (function() {
         if( ! state.Calendar ) {
             setDefaults();
         }
-        if ( ! state.Alarm ) {
-            setAlarmDefaults();
+        if ( ! state.Alarm1 ) {
+            setAlarm1Defaults();
+        }
+        if ( ! state.Alarm2 ) {
+            setAlarm2Defaults();
+        }
+        if ( ! state.Alarm3 ) {
+            setAlarm3Defaults();
+        }
+        if ( ! state.Alarm4 ) {
+            setAlarm4Defaults();
+        }
+        if ( ! state.Alarm5 ) {
+            setAlarm5Defaults();
+        }
+        if ( ! state.Alarm6 ) {
+            setAlarm6Defaults();
+        }
+        if ( ! state.Alarm7 ) {
+            setAlarm7Defaults();
+        }
+        if ( ! state.Alarm8 ) {
+            setAlarm8Defaults();
+        }
+        if ( ! state.Alarm9 ) {
+            setAlarm9Defaults();
+        }
+        if ( ! state.Alarm10 ) {
+            setAlarm10Defaults();
         }
     },
     
