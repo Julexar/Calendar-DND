@@ -193,6 +193,7 @@ var Calendar = Calendar || (function() {
                     chkalarm8();
                     chkalarm9();
                     chkalarm10();
+                    weather();
                     break;
                 case '!setmonth':
                     getordinal(msg);
@@ -211,6 +212,7 @@ var Calendar = Calendar || (function() {
                     break;
                 case '!setyear':
                     state.Calendar.now.year=args[1];
+                    weather();
                     calmenu();
                     chkalarm1();
                     chkalarm2();
@@ -268,6 +270,9 @@ var Calendar = Calendar || (function() {
                     break;
                 case '!advtime':
                     advtime(args[1],args[2]);
+                    if (((args[1].toLowerCase()=="short rest" || args[1].toLowerCase()=="hours") && Number(args[2])>=8) || args[1].toLowerCase()=="long rest" || args[1].toLowerCase()=="months" || args[1].toLowerCase()=="days" || args[1].toLowerCase()=="years") {
+                        weather();
+                    }
                     calmenu();
                     chkalarm1();
                     chkalarm2();
@@ -282,6 +287,7 @@ var Calendar = Calendar || (function() {
                     break;
                 case '!setalarm':
                     setalarm(args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
+                    calmenu();
                     chkalarm1();
                     chkalarm2();
                     chkalarm3();
@@ -580,7 +586,7 @@ var Calendar = Calendar || (function() {
     
     weather = function() {
         var roll;
-        var temperature="";
+        var temperature;
         var wind;
         var precipitation;
         var season;
@@ -607,13 +613,13 @@ var Calendar = Calendar || (function() {
                     temperature="It is a hot summer day.";
                 }
                 if (rand<=70) {
-                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
+                    temperature+=" The weather is clear. There won't be any sandstorms today.";
                 } else if (rand<=80) {
-                    temperature+="\nA sandstorm is raging outside. It will last the entire day.";
+                    temperature+=" A sandstorm is raging outside. It will last the entire day.";
                 } else if (rand<=90) {
-                    temperature+="\nA sandstorm is raging outside. It will last for half of the day.";
+                    temperature+=" A sandstorm is raging outside. It will last for half of the day.";
                 } else {
-                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
+                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
             case 'Spring':
@@ -626,58 +632,57 @@ var Calendar = Calendar || (function() {
                 }
                 if (rand<=80) {
                     //No storm
-                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
+                    temperature+=" The weather is clear. There won't be any sandstorms today.";
                 } else if (rand<=90) {
                     //Half day storm
-                    temperature+="\nA sandstorm is raging outside. It will last for half of the day.";
+                    temperature+=" A sandstorm is raging outside. It will last for half of the day.";
                 } else {
                     //8 hour storm
-                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
+                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
             case 'Fall':
                 if (temrand<=90) {
                     //hot
-                    temperature="It is a hot fall day. ";
+                    temperature="It is a hot fall day.";
                 } else {
                     //mild
-                    temperature="It is a mild fall day, staying hydrated is easier. ";
+                    temperature="It is a mild fall day, staying hydrated is easier.";
                 }
                 if (rand<=80) {
                     //No storm
-                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
+                    temperature+=" The weather is clear. There won't be any sandstorms today.";
                 } else if (rand<=90) {
                     //half day storm
-                    temperature+="\nA sandstorm is raging outside. It will last for half of the day.";
+                    temperature+=" A sandstorm is raging outside. It will last for half of the day.";
                 } else {
                     //8 hour storm
-                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
+                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
             case 'Winter':
                 if (temrand<=50) {
                     //mild
-                    temperature="It is a mild winter day, staying hydrated is easier. ";
+                    temperature="It is a mild winter day, staying hydrated is easier.";
                 } else if (temrand<=90) {
                     //hot
-                    temperature="It is a hot winter day. ";
+                    temperature="It is a hot winter day.";
                 } else {
                     //rain
-                    temperature="It is a cooler winter day and it looks like it will rain. ";
+                    temperature="It is a cooler winter day and it looks like it will rain.";
                 }
                 if (rand<=90) {
                     //No storm
-                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
+                    temperature+=" The weather is clear. There won't be any sandstorms today.";
                 } else {
                     //8 hour storm
-                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
+                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
         }
         
         
         var forecast=temperature;
-        sendChat("Calendar","/w gm "+forecast);
         state.Calendar.now.weather = forecast;
     },
     
