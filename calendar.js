@@ -320,6 +320,19 @@ var Calendar = Calendar || (function() {
                     chkalarm9();
                     chkalarm10();
                     break;
+                case '!enc':
+                    encounter(args[1]);
+                    chkalarm1();
+                    chkalarm2();
+                    chkalarm3();
+                    chkalarm4();
+                    chkalarm5();
+                    chkalarm6();
+                    chkalarm7();
+                    chkalarm8();
+                    chkalarm9();
+                    chkalarm10();
+                    break;
     	    }
 		}else if(args[0]=='!cal'){
 		    showcal(msg);
@@ -341,6 +354,7 @@ var Calendar = Calendar || (function() {
         var day = nowdate[1];
         var moon = getmoon();
         
+        
         sendChat('Calendar', '/w gm <div ' + divstyle + '>' + //--
             '<div ' + headstyle + '>Calendar</div>' + //--
             '<div ' + substyle + '>Menu</div>' + //--
@@ -358,6 +372,7 @@ var Calendar = Calendar || (function() {
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!weather">Roll Weather</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!setalarm,?{Alarmnumber?|Alarm1|Alarm2|Alarm3|Alarm4|Alarm5|Alarm6|Alarm7|Alarm8|Alarm9|Alarm10},?{Day?|5},?{Month?|Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasias|Eleint|Marpenoth|Uktar|Nightal},?{Year?|1486},?{Hour?|5},?{Minute?|5},?{Title?|1}">Set an Alarm</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!playercal">Show to Players</a></div>' + //--
+            '<div style="text-align:center;"><a ' + astyle2 + '" href="!enc,?{Location?|City|Desert}">Random Encounter</a></div>' + //--
             '</div>'
         );
     },
@@ -380,9 +395,13 @@ var Calendar = Calendar || (function() {
         var minute;
         if (Number(state.Calendar.now.hour)<10) {
             hour=`0${state.Calendar.now.hour}`;
+        } else {
+            hour=state.Calendar.now.hour;
         }
         if (Number(state.Calendar.now.minute)<10) {
             minute=`0${state.Calendar.now.minute}`;
+        } else {
+            minute=state.Calendar.now.minute;
         }
         
         
@@ -403,61 +422,56 @@ var Calendar = Calendar || (function() {
         var month;
         
         if(day>0 && day<=30){
-            month="Hammer"; 
-            date=day;
-        }else if(day==31){
-            month="Midwinter"; 
-            date='festival';
-        }else if(day>31 && day<=61){
-            month="Alturiak"; 
-            date=day-31;
-        }else if(day>61 && day<=91){
-            month="Ches";
-            date=day-61;
-        }else if(day>91 && day<=121){
-            month="Tarsakh";
-            date=day-91;
-        }else if(day==122){
-            month="Greengrass";
-            date='festival';
-        }else if(day>122 && day<=152){
-            month="Mirtul";
-            date=day-122;
-        }else if(day>152 && day<=182){
-            month="Kythorn";
-            date=day-152;
-        }else if(day>182 && day<=212){
-            month="Flamerule";
-            date=day-182;
-        }else if(day==213){
-            month="Midsummer";
-            date='festival';
-        }else if(day>213 && day<=243){
-            month="Eleasias"
-            date=day-213;
-        }else if(day>243 && day<=273){
-            month="Eleint";
-            date=day-243;
-        }else if(day==274){
-            month="Highharvestide";
-            date='festival';
-        }else if(day>274 && day<=304){
-            month="Marpenoth";
-            date=day-274;
-        }else if(day>304 && day<=334){
-            month="Uktar";
-            date=day-304;
-        }else if(day==335){
-            month="Feast of the Moon";
-            date='festival';
-        }else if(day>335 && day<=365){
-            month="Nightal";
-            date=day-335;
-        }else{
             month="Hammer";
-            date='1';
+            state.Calendar.now.month=String(month);
+            date=day;
+        }else if(day>30 && day<=60){
+            month="Alturiak";
+            state.Calendar.now.month=String(month);
+            date=day-30;
+        }else if(day>60 && day<=90){
+            month="Ches";
+            state.Calendar.now.month=String(month);
+            date=day-60;
+        }else if(day>90 && day<=120){
+            month="Tarsakh";
+            state.Calendar.now.month=String(month);
+            date=day-90;
+        }else if(day>120 && day<=150){
+            month="Mirtul";
+            state.Calendar.now.month=String(month);
+            date=day-120;
+        }else if(day>150 && day<=180){
+            month="Kythorn";
+            state.Calendar.now.month=String(month);
+            date=day-150;
+        }else if(day>180 && day<=210){
+            month="Flamerule";
+            state.Calendar.now.month=String(month);
+            date=day-180;
+        }else if(day>210 && day<=240){
+            month="Eleasias";
+            state.Calendar.now.month=String(month);
+            date=day-210;
+        }else if(day>240 && day<=270){
+            month="Eleint";
+            state.Calendar.now.month=String(month);
+            date=day-240;
+        }else if(day>270 && day<=300){
+            month="Marpenoth";
+            state.Calendar.now.month=String(month);
+            date=day-270;
+        }else if(day>300 && day<=330){
+            month="Uktar";
+            state.Calendar.now.month=String(month);
+            date=day-300;
+        }else if(day>330 && day<360){
+            month="Nightal";
+            state.Calendar.now.month=String(month);
+            date=day-335;
         }
-        
+        state.Calendar.now.month=String(month);
+        state.Calendar.now.day=date;
         var array=month+','+String(date);
         return array;    
     },
@@ -477,54 +491,51 @@ var Calendar = Calendar || (function() {
         switch(month) {
             case 'Hammer':
                 ordinal = date;
-                break;
-            case 'Midwinter':
-                ordinal = 31;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Alturiak':
-                ordinal = 31+date;
+                ordinal = 30+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Ches':
-                ordinal = 61+date;
+                ordinal = 60+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Tarsakh':
-                ordinal = 91+date;
-                break;
-            case 'Greengrass':
-                ordinal = 122;
+                ordinal = 90+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Mirtul':
-                ordinal = 122+date;
+                ordinal = 120+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Kythorn':
-                ordinal = 152+date;
+                ordinal = 150+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Flamerule':
-                ordinal = 182+date;
-                break;
-            case 'Midsummer':
-                ordinal = 213;
+                ordinal = 180+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Eleasias':
-                ordinal = 213+date;
+                ordinal = 210+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Eleint':
-                ordinal = 243+date;
-                break;
-            case 'Highharvestide':
-                ordinal = 274;
+                ordinal = 240+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Marpenoth':
-                ordinal = 274+date;
+                ordinal = 270+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Uktar':
-                ordinal = 304+date;
-                break;
-            case 'Feast of the Moon':
-                ordinal = 334+date;
+                ordinal = 300+date;
+                state.Calendar.now.month=String(month);
                 break;
             case 'Nightal':
-                ordinal = 335+date;
+                ordinal = 330+date;
+                state.Calendar.now.month=String(month);
                 break;
             }
         state.Calendar.now.ordinal = ordinal;
@@ -561,21 +572,10 @@ var Calendar = Calendar || (function() {
     
     addday = function(add) {
         var ordinal = Number(add);
-        var div = state.Calendar.now.div;
-        
-        if(div!=0){
-            state.Calendar.now.down = Number(state.Calendar.now.down)+ordinal;
-        }
-        
         
         ordinal = ordinal + Number(state.Calendar.now.ordinal);
         
-        if(ordinal>365){
-            ordinal=ordinal-365;
-            state.Calendar.now.year = Number(state.Calendar.now.year)+1;
-        }
-        
-        state.Calendar.now.ordinal = ordinal;
+        state.Calendar.now.ordinal=ordinal;
     },
     
     weather = function() {
@@ -585,99 +585,92 @@ var Calendar = Calendar || (function() {
         var precipitation;
         var season;
         var ordinal = state.Calendar.now.ordinal;
+        var rand;
+        var temrand;
         
-        if(ordinal > 349 || ordinal <= 75){
+        if(ordinal > 340 || ordinal <= 70){
             season = 'Winter'
-        }else if(ordinal > 75 && ordinal <= 166){
+        }else if(ordinal > 70 && ordinal <= 160){
             season = 'Spring'
-        }else if(ordinal > 166 && ordinal <=257 ){
+        }else if(ordinal > 160 && ordinal <=250 ){
             season = 'Summer'
-        }else if(ordinal > 257 && ordinal <=349 ){
+        }else if(ordinal > 250 && ordinal <=340 ){
             season = 'Fall'
         }
-        
-        roll = Math.floor(Math.random()*(20-1+1)+1);
-        if(roll>=15 && roll<=17){
-            switch(season) {
-                case 'Winter':
-                    temperature = 'It is a bitterly cold winter day. ';
-                    break;
-                case 'Spring':
-                    temperature = 'It is a cold spring day. ';
-                    break;
-                case 'Summer':
-                    temperature = 'It is a cool summer day. ';
-                    break;
-                case 'Fall':
-                    temperature = 'It is a cold fall day. ';
-                    break;
-            }
-        }else if(roll>=18 && roll<=20){
-            switch(season) {
-                case 'Winter':
-                    temperature = 'It is a warm winter day. ';
-                    break;
-                case 'Spring':
-                    temperature = 'It is a hot spring day. ';
-                    break;
-                case 'Summer':
-                    temperature = 'It is a blisteringly hot summer day. ';
-                    break;
-                case 'Fall':
-                    temperature = 'It is a hot fall day. ';
-                    break;
-            }
-        }else{
-            switch(season) {
-                case 'Winter':
-                    temperature = 'It is a cold winter day. ';
-                    break;
-                case 'Spring':
-                    temperature = 'It is a mild spring day. ';
-                    break;
-                case 'Summer':
-                    temperature = 'It is a hot summer day. ';
-                    break;
-                case 'Fall':
-                    temperature = 'It is a mild fall day. ';
-                    break;
-            }
-            
+        rand=randomInteger(100);
+        temrand=randomInteger(100);
+        switch (season) {
+            case 'Summer':
+                if (temrand<=90) {
+                    temperature="It is an extremely hot summer day. It is recommended to drink more. ";
+                } else {
+                    temperature="It is a hot summer day. ";
+                }
+                if (rand<=70) {
+                    temperature+="The weather is clear. There won't be any sandstorms today.";
+                } else if (rand<=80) {
+                    temperature+="A sandstorm is raging outside. It will last the entire day.";
+                } else if (rand<=90) {
+                    temperature+="A sandstorm is raging outside. It will last for half of the day.";
+                } else {
+                    temperature+="A sandstorm is raging outside. It will last for 8 hours.";
+                }
+                break;
+            case 'Spring':
+                if (temrand<=90) {
+                    //Hot
+                    temperature="It is a hot spring day. ";
+                } else {
+                    //mild
+                    temperature="It is a mild spring day, staying hydrated is easier. ";
+                }
+                if (rand<=80) {
+                    //No storm
+                    temperature="";
+                } else if (rand<=90) {
+                    //Half day storm
+                    temperature="";
+                } else {
+                    //8 hour storm
+                    temperature="";
+                }
+                break;
+            case 'Fall':
+                if (temrand<=90) {
+                    //hot
+                    temperature="It is a hot fall day. ";
+                } else {
+                    //mild
+                    temperature="It is a mild fall day, staying hydrated is easier. ";
+                }
+                if (rand<=80) {
+                    //No storm
+                } else if (rand<=90) {
+                    //half day storm
+                } else {
+                    //8 hour storm
+                }
+                break;
+            case 'Winter':
+                if (temrand<=50) {
+                    //mild
+                    temperature="It is a mild winter day. ";
+                } else if (temrand<=90) {
+                    //hot
+                    temperature="It is a hot winter day. ";
+                } else {
+                    //rain
+                    temperature="It is a cooler winter day and it looks like it will rain. ";
+                }
+                if (rand<=90) {
+                    //No storm
+                } else {
+                    //8 hour storm
+                }
         }
         
-        roll = Math.floor(Math.random()*(20-1+1)+1);
-        if(roll>=15 && roll<=17){
-            wind='There is a light breeze and ';
-        }else if(roll>=18 && roll<=20){
-            wind='There is a howling wind and ';
-        }else{
-            wind='The air is still and ';
-        }
         
-        roll = Math.floor(Math.random()*(20-1+1)+1);
-        if(roll>=15 && roll<=17){
-            precipitation="Light rain or snow.";
-            if(season=='Winter'){
-                precipitation = 'snow falls softly on the ground.';
-            }else{
-                precipitation = 'a light rain falls from the sky.';
-            }
-        }else if(roll>=18 && roll<=20){
-            if(season=='Winter'){
-                precipitation = 'snow falls thick and fast from the sky.';
-            }else{
-                precipitation = 'a torrential rain begins to fall.';
-            }
-        }else{
-            roll = Math.floor(Math.random()*(2-1+1)+1);
-            if(roll=1){
-                precipitation = 'the sky is overcast.';
-            }else{
-                precipitation = 'the sky is clear.';
-            }
-        }
-        
-        var forecast=temperature+wind+precipitation;
+        var forecast=temperature;
         state.Calendar.now.weather = forecast;
     },
     
@@ -719,82 +712,128 @@ var Calendar = Calendar || (function() {
     },
     
     advtime = function(type,amount) {
-        var hours=0;
-        var minutes=0;
-        var days=0;
-        var years=0;
-        var months=0;
-        var months=0;
+        var hour=Number(state.Calendar.now.hour);
+        var minute=Number(state.Calendar.now.minute);
+        var day=Number(state.Calendar.now.day);
+        var year=Number(state.Calendar.now.year);
+        var month=0;
         var rtype = type.toLowerCase();
-        var ordinal;
+        var ordinal=Number(state.Calendar.now.ordinal);
+        var cmonth=String(state.Calendar.now.month);
+        var rmonth;
+        switch (cmonth) {
+            case 'Hammer':
+                rmonth=1;
+                break;
+            case 'Alturiak':
+                rmonth=2;
+                break;
+            case 'Ches':
+                rmonth=3;
+                break;
+            case 'Tarsakh':
+                rmonth=4;
+                break;
+            case 'Mirtul':
+                rmonth=5;
+                break;
+            case 'Kythorn':
+                rmonth=6;
+                break;
+            case 'Flamerule':
+                rmonth=7;
+                break;
+            case 'Eleasias':
+                rmonth=8;
+                break;
+            case 'Eleint':
+                rmonth=9;
+                break;
+            case 'Marpenoth':
+                rmonth=10;
+                break;
+            case 'Uktar':
+                rmonth=11;
+                break;
+            case 'Nightal':
+                rmonth=12;
+                break;
+        }
+        month=rmonth;
         for (let i=0;i<Number(amount);i++) {
             if (rtype=="short rest") {
-                hours+=1;
+                hour+=1;
             } else if (rtype=="long rest") {
-                hours+=8;
+                hour+=8;
             } else if (rtype=="days") {
-                days+=1;
+                ordinal+=1;
+                day+=1;
             } else if (rtype=="months") {
-                months+=1;
-            } else if (rtype=="years") {
-                years+=1;
-            }
-            if (hours>24) {
-                hours-=24;
-                days+=1;
-            }
-            if (minutes>60) {
-                minutes-=60;
-                hours+=1;
-            }
-            if (months>12) {
-                months-=12;
-                years+=1;
-            }
-            if (days>30) {
+                ordinal+=30;
                 month+=1;
-                days-=30;
+            } else if (rtype=="years") {
+                ordinal+=360;
             }
         }
-        if (days>0) {
-            adday(days);
+        year+=Math.floor(ordinal/360);
+        while (ordinal>360) {
+            ordinal-=360;
         }
-        if (hours>0) {
-            state.Calendar.now.hour=Number(state.Calendar.now.hour)+hours;
+        day+=Math.floor(hour/24);
+        while (hour>24) {
+            hour-=12;
         }
-        if (minutes>0) {
-            state.Calendar.now.minute=Number(state.Calendar.now.minute)+minutes;
+        while (day>30) {
+            day-=30;
         }
-        if (years>0) {
-            state.Calendar.now.year=Number(state.Calendar.now.year)+years;
+        year+=Math.floor(month/12);
+        while (month>12) {
+            month-=12;
         }
-        if (month>0) {
-            var monthlist = "Hammer,1;Alturiak,2;Ches,3;Tarsakh,4;Mirtul,5;Kythorn,6;Flamerule,7;Eleasias,8;Eleint,9;Marpenoth,10;Uktar,11;Nightal,12";
-            var list1 = monthlist.split(';');
-            let list2="";
-            for (let i=0;i<list1.length;i++) {
-                list2=list2+String(list1[i]);
-                if (i!=list1.length-1) {
-                    list2=list2+",";
-                } 
-            }
-            var list3=list2.split(',');
-            var monnum;
-            var month;
-            for (let i=0;i<list3.length;i++) {
-                if (list3[i]==state.Calendar.now.month) {
-                    monnum=i+1;
-                }
-            }
-            for (let i=0;i<amount;i++) {
-                monnum=Number(monnum)+2
-                if (monnum>23) {
-                    monnum=1;
-                }
-            }
-            month=list3[monnum-1];
-            state.Calendar.now.month=month;
+        switch (month) {
+            case 1:
+                cmonth="Hammer";
+                break;
+            case 2:
+                cmonth="Alturiak";
+                break;
+            case 3:
+                cmonth="Ches";
+                break;
+            case 4:
+                cmonth="Tarsakh";
+                break;
+            case 5:
+                cmonth="Mirtul";
+                break;
+            case 6:
+                cmonth="Kythorn";
+                break;
+            case 7:
+                cmonth="Flamerule";
+                break;
+            case 8:
+                cmonth="Eleasias";
+                break;
+            case 9:
+                cmonth="Eleint";
+                break;
+            case 10:
+                cmonth="Marpenoth";
+                break;
+            case 11:
+                cmonth="Uktar";
+                break;
+            case 12:
+                cmonth="Nightal";
+                break;
         }
+        state.Calendar.now.ordinal=ordinal;
+        state.Calendar.now.day=day;
+        state.Calendar.now.month=cmonth;
+        state.Calendar.now.year=year;
+        state.Calendar.now.hour=hour;
+        state.Calendar.now.minute=minute;
     },
     
     setalarm = function(anum,tday,tmonth,tyear,thour,tminute,ttitle) {
@@ -804,7 +843,7 @@ var Calendar = Calendar || (function() {
         var hour=Number(thour);
         var minute=Number(tminute);
         var title=String(ttitle);
-        var maxday;
+        var maxday=30;
         var rday=0;
         var num=anum;
         if (Number(hour)<10) {
@@ -813,48 +852,13 @@ var Calendar = Calendar || (function() {
         if (Number(minute)<10) {
             minute=`0${minute}`;
         }
-        switch (month) {
-            case 'Hammer':
-                maxday=31;
-                break;
-            case 'Ches':
-                maxday=30;
-                break;
-            case 'Tarsakh':
-                maxday=30;
-                break;
-            case 'Mirtul':
-                maxday=31;
-                break;
-            case 'Kythorn':
-                maxday=30;
-                break;
-            case 'Flamerule':
-                maxday=31;
-                break;
-            case 'Eleasias':
-                maxday=30;
-                break;
-            case 'Eleint':
-                maxday=31;
-                break;
-            case 'Marpenoth':
-                maxday=30;
-                break;
-            case 'Uktar':
-                maxday=31;
-                break;
-            case 'Nightal':
-                maxday=30;
-                break;
-        }
         sendChat("Calendar",`/w gm Your Alarm >>${title}<< has been set for Day ${day} of ${month} of the Year ${year} at ${hour}:${minute}`);
         if (day>maxday) {
             sendChat("Calendar","/w gm Error with the Input. The chosen month only has "+maxday+" days!");
         } else {
             
             if (month!="Hammer") {
-                rday=Number(day)+31;
+                rday=Number(day)+30;
                 if (month!="Alturiak") {
                     rday+=30;
                     if (month!="Ches") {
@@ -862,19 +866,19 @@ var Calendar = Calendar || (function() {
                         if (month!="Tarsakh") {
                             rday+=30;
                             if (month!="Mirtul") {
-                                rday+=31;
+                                rday+=30;
                                 if (month!="Kythorn") {
                                     rday+=30;
                                     if (month!="Flamerule") {
-                                        rday+=31;
+                                        rday+=30;
                                         if (month!="Eleasias") {
                                             rday+=30;
                                             if (month!="Eleint") {
-                                                rday+=31;
+                                                rday+=30;
                                                 if (month!="Marpenoth") {
                                                     rday+=30;
                                                     if (month!="Uktar") {
-                                                        rday+=31;
+                                                        rday+=30;
                                                         if (month=="Nightal") {
                                                             rday+=30;
                                                         }
@@ -1080,6 +1084,31 @@ var Calendar = Calendar || (function() {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm10.now.title}<< triggered!`);
                     }
                 }
+            }
+        }
+    },
+    
+    encounter = function(loc) {
+        var rand=Math.random();
+        if (String(loc)=="Desert") {
+            if (rand<=0.125) {
+                sendChat("Calendar","/w gm No Encounters today!");
+            } else if (rand<=0.5) {
+                sendChat("Calendar","/w gm There is 1 Encounter today!");
+            } else if (rand<=0.875) {
+                sendChat("Calendar","/w gm There are 2 Encounters today!");
+            } else {
+                sendChat("Calendar","/w gm There are 3 Encounters today!");
+            }
+        } else if (String(loc)=="City") {
+            if (rand<=0.125) {
+                sendChat("Calendar","/w gm There are 2 Encounters today!");
+            } else if (rand<=0.5) {
+                sendChat("Calendar","/w gm There are 3 Encounter today!");
+            } else if (rand<=0.875) {
+                sendChat("Calendar","/w gm There are 4 Encounters today!");
+            } else {
+                sendChat("Calendar","/w gm There are 5 Encounters today!");
             }
         }
     },
