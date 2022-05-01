@@ -372,7 +372,7 @@ var Calendar = Calendar || (function() {
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!weather">Roll Weather</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!setalarm,?{Alarmnumber?|Alarm1|Alarm2|Alarm3|Alarm4|Alarm5|Alarm6|Alarm7|Alarm8|Alarm9|Alarm10},?{Day?|5},?{Month?|Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasias|Eleint|Marpenoth|Uktar|Nightal},?{Year?|1486},?{Hour?|5},?{Minute?|5},?{Title?|1}">Set an Alarm</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!playercal">Show to Players</a></div>' + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!enc,?{Location?|City|Desert}">Random Encounter</a></div>' + //--
+            '<div style="text-align:center;"><a ' + astyle2 + '" href="!enc,?{Location?|City|Wilderness}">Random Encounter</a></div>' + //--
             '</div>'
         );
     },
@@ -409,7 +409,7 @@ var Calendar = Calendar || (function() {
             '<div ' + headstyle + '>Calendar</div>' + //--
             '<div ' + substyle + '>Player View</div>' + //--
             '<div ' + arrowstyle + '></div>' + //--
-            day + suffix + ' ' + month + ', ' + state.Calendar.now.year + //--
+            day + suffix + ' of ' + month + ', ' + state.Calendar.now.year + //--
             '<br>Current Time: ' + hour + ':' + minute + //--
             '<br><br>Today\'s weather:<br>' + state.Calendar.now.weather + //--
             '<br><br>Moon: ' + moon
@@ -580,21 +580,21 @@ var Calendar = Calendar || (function() {
     
     weather = function() {
         var roll;
-        var temperature;
+        var temperature="";
         var wind;
         var precipitation;
         var season;
-        var ordinal = state.Calendar.now.ordinal;
+        var ordinal = Number(state.Calendar.now.ordinal);
         var rand;
         var temrand;
         
-        if(ordinal > 340 || ordinal <= 70){
+        if(ordinal > 330 || ordinal <= 70){
             season = 'Winter'
         }else if(ordinal > 70 && ordinal <= 160){
             season = 'Spring'
         }else if(ordinal > 160 && ordinal <=250 ){
             season = 'Summer'
-        }else if(ordinal > 250 && ordinal <=340 ){
+        }else if(ordinal > 250 && ordinal <=330 ){
             season = 'Fall'
         }
         rand=randomInteger(100);
@@ -602,37 +602,37 @@ var Calendar = Calendar || (function() {
         switch (season) {
             case 'Summer':
                 if (temrand<=90) {
-                    temperature="It is an extremely hot summer day. It is recommended to drink more. ";
+                    temperature="It is an extremely hot summer day. It is recommended to drink more.";
                 } else {
-                    temperature="It is a hot summer day. ";
+                    temperature="It is a hot summer day.";
                 }
                 if (rand<=70) {
-                    temperature+="The weather is clear. There won't be any sandstorms today.";
+                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
                 } else if (rand<=80) {
-                    temperature+="A sandstorm is raging outside. It will last the entire day.";
+                    temperature+="\nA sandstorm is raging outside. It will last the entire day.";
                 } else if (rand<=90) {
-                    temperature+="A sandstorm is raging outside. It will last for half of the day.";
+                    temperature+="\nA sandstorm is raging outside. It will last for half of the day.";
                 } else {
-                    temperature+="A sandstorm is raging outside. It will last for 8 hours.";
+                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
             case 'Spring':
                 if (temrand<=90) {
                     //Hot
-                    temperature="It is a hot spring day. ";
+                    temperature="It is a hot spring day.";
                 } else {
                     //mild
-                    temperature="It is a mild spring day, staying hydrated is easier. ";
+                    temperature="It is a mild spring day, staying hydrated is easier.";
                 }
                 if (rand<=80) {
                     //No storm
-                    temperature="";
+                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
                 } else if (rand<=90) {
                     //Half day storm
-                    temperature="";
+                    temperature+="\nA sandstorm is raging outside. It will last for half of the day.";
                 } else {
                     //8 hour storm
-                    temperature="";
+                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
             case 'Fall':
@@ -645,16 +645,19 @@ var Calendar = Calendar || (function() {
                 }
                 if (rand<=80) {
                     //No storm
+                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
                 } else if (rand<=90) {
                     //half day storm
+                    temperature+="\nA sandstorm is raging outside. It will last for half of the day.";
                 } else {
                     //8 hour storm
+                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
                 }
                 break;
             case 'Winter':
                 if (temrand<=50) {
                     //mild
-                    temperature="It is a mild winter day. ";
+                    temperature="It is a mild winter day, staying hydrated is easier. ";
                 } else if (temrand<=90) {
                     //hot
                     temperature="It is a hot winter day. ";
@@ -664,13 +667,17 @@ var Calendar = Calendar || (function() {
                 }
                 if (rand<=90) {
                     //No storm
+                    temperature+="\nThe weather is clear. There won't be any sandstorms today.";
                 } else {
                     //8 hour storm
+                    temperature+="\nA sandstorm is raging outside. It will last for 8 hours.";
                 }
+                break;
         }
         
         
         var forecast=temperature;
+        sendChat("Calendar","/w gm "+forecast);
         state.Calendar.now.weather = forecast;
     },
     
@@ -1090,7 +1097,7 @@ var Calendar = Calendar || (function() {
     
     encounter = function(loc) {
         var rand=Math.random();
-        if (String(loc)=="Desert") {
+        if (String(loc)=="Wilderness") {
             if (rand<=0.125) {
                 sendChat("Calendar","/w gm No Encounters today!");
             } else if (rand<=0.5) {
@@ -1104,7 +1111,7 @@ var Calendar = Calendar || (function() {
             if (rand<=0.125) {
                 sendChat("Calendar","/w gm There are 2 Encounters today!");
             } else if (rand<=0.5) {
-                sendChat("Calendar","/w gm There are 3 Encounter today!");
+                sendChat("Calendar","/w gm There are 3 Encounters today!");
             } else if (rand<=0.875) {
                 sendChat("Calendar","/w gm There are 4 Encounters today!");
             } else {
