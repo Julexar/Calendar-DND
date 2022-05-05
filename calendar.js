@@ -798,7 +798,6 @@ var Calendar = Calendar || (function() {
         while (day>30) {
             day-=30;
         }
-        year+=Math.floor(month/12);
         while (month>12) {
             month-=12;
         }
