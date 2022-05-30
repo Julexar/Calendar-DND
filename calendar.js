@@ -484,12 +484,13 @@ var Calendar = Calendar || (function() {
         var date = args[1];
         var month = args[2];
         var ordinal = state.Calendar.now.ordinal;
-        
-        if(date == 'festival'){
-            date = 1;
-        }else{
-            date = Number(args[1]);
-        }
+        sendChat("Tester","/w gm "+date);
+        date=date.replace("st","");
+        date=date.replace("nd","");
+        date=date.replace("rd","");
+        date=date.replace("th","");
+        sendChat("Tester","/w gm "+date);
+        date = Number(date);
         
         switch(month) {
             case 'Hammer':
