@@ -2,7 +2,7 @@
 // Created by Kirsty (https://app.roll20.net/users/1165285/kirsty)
 
 // API Commands:
-// !cal - for the GM displays the menu in the chat window, for a player displays date, weather, moon and down days
+// !cal - for the GM displays the menu in the chat window, for a player displays date, weather, moon, hour and minute
 
 // Red Colour: #7E2D40
 
@@ -358,6 +358,8 @@ var Calendar = Calendar || (function() {
         var nowdate = getdate(state.Calendar.now.ordinal).split(',');
         var month = nowdate[0];
         var day = nowdate[1];
+        var moon = getmoon();
+        
         
         sendChat('Calendar', '/w gm <div ' + divstyle + '>' + //--
             '<div ' + headstyle + '>Calendar</div>' + //--
@@ -371,7 +373,7 @@ var Calendar = Calendar || (function() {
             '<tr><td>Minute: </td><td><a ' + astyle1 + '" href="!setminute,?{Minute?|5}">' + state.Calendar.now.minute + '</a></td></tr>' + //--
             '</table>' + //--
             '<br>Weather: ' + state.Calendar.now.weather + //--
-            '<br><br>' + //--
+            '<br><br>Moon: ' + moon + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!advtime,?{Format of Time?|Short Rest|Long Rest|Days|Months|Years},?{Amount?|5}">Advance the Time</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!weather">Roll Weather</a></div>' + //--
             '<div style="text-align:center;"><a ' + astyle2 + '" href="!setalarm,?{Alarmnumber?|Alarm1|Alarm2|Alarm3|Alarm4|Alarm5|Alarm6|Alarm7|Alarm8|Alarm9|Alarm10},?{Day?|5},?{Month?|Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasias|Eleint|Marpenoth|Uktar|Nightal},?{Year?|1486},?{Hour?|5},?{Minute?|5},?{Title?|1}">Set an Alarm</a></div>' + //--
@@ -386,6 +388,7 @@ var Calendar = Calendar || (function() {
         var month = nowdate[0];
         var day = nowdate[1];
         var down = state.Calendar.now.down;
+            down = getdown(down);
         var suffix = getsuffix(day);
         var divstyle = 'style="width: 189px; border: 1px solid black; background-color: #ffffff; padding: 5px;"'
         var tablestyle = 'style="text-align:center;"';
@@ -415,7 +418,7 @@ var Calendar = Calendar || (function() {
             day + suffix + ' of ' + month + ', ' + state.Calendar.now.year + //--
             '<br>Current Time: ' + hour + ':' + minute + //--
             '<br><br>Today\'s weather:<br>' + state.Calendar.now.weather + //--
-            '</div>'
+            '<br><br>Moon: ' + moon
         );
     },
     
@@ -484,12 +487,10 @@ var Calendar = Calendar || (function() {
         var date = args[1];
         var month = args[2];
         var ordinal = state.Calendar.now.ordinal;
-        sendChat("Tester","/w gm "+date);
         date=date.replace("st","");
         date=date.replace("nd","");
         date=date.replace("rd","");
         date=date.replace("th","");
-        sendChat("Tester","/w gm "+date);
         date = Number(date);
         
         switch(month) {
@@ -682,6 +683,43 @@ var Calendar = Calendar || (function() {
         
         var forecast=temperature;
         state.Calendar.now.weather = forecast;
+    },
+    
+    getmoon = function() {
+        var ordinal = state.Calendar.now.ordinal;
+        var moonNo;
+        var moon;
+        
+        moonNo = Math.ceil(ordinal/3)-Math.floor(Math.ceil(ordinal/3)/8)*8;
+        
+        switch(moonNo) {
+            case 1:
+                moon = 'First Quarter';
+                break;
+            case 2:
+                moon = 'Waxing Cresent';
+                break;
+            case 3:
+                moon = 'New';
+                break;
+            case 4:
+                moon = 'Waning Cresent';
+                break;
+            case 5:
+                moon = 'Third Quarter';
+                break;
+            case 6:
+                moon = 'Waning Gibbous';
+                break;
+            case 7:
+                moon = 'Full';
+                break;
+            case 0:
+                moon = 'Waxing Gibbous';
+                break;
+        }
+        
+        return moon;
     },
     
     advtime = function(type,amount) {
