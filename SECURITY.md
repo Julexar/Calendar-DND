@@ -7,7 +7,10 @@
 | 1.0   | :x: |
 | 2.0   | :x: |
 | 3.0   | :x: |
-| 3.1   | :white_check_mark: |
+| 3.1   | :x: |
+| 3.2   | :white_check_mark: |
+| 4.0 - No Moon   | :x: |
+| 4.1   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
