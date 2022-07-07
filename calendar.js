@@ -16,7 +16,7 @@ API Commands:
 var Calendar = Calendar || (function() {
     'use strict';
     
-    var version = "5.0",
+    var version = "5.0a",
     
     setDefaults = function() {
         state.calendar = {
