@@ -1,5 +1,6 @@
 // Calendar and down day counter for Faerun
 // Created by Kirsty (https://app.roll20.net/users/1165285/kirsty)
+// Updated by Julexar (https://app.roll20.net/users/9989180/julexar)
 
 // API Commands:
 // !cal - for the GM displays the menu in the chat window, for a player displays date, weather, moon, hour and minute
@@ -9,7 +10,7 @@
 var Calendar = Calendar || (function() {
     'use strict';
     
-    var version = '0.2.4',
+    var version = '4.1',
     
     setDefaults = function() {
         state.Calendar = {
