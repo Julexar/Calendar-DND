@@ -41,125 +41,8 @@ var Calendar = Calendar || (function() {
         };
     },
     
-    setAlarm1Defaults = function() {
+    setAlarmDefaults = function() {
         state.Alarm1 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm2Defaults = function() {
-        state.Alarm2 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm3Defaults = function() {
-        state.Alarm3 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm4Defaults = function() {
-        state.Alarm4 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm5Defaults = function() {
-        state.Alarm5 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm6Defaults = function() {
-        state.Alarm6 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm7Defaults = function() {
-        state.Alarm7 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm8Defaults = function() {
-        state.Alarm8 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm9Defaults = function() {
-        state.Alarm9 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 0,
-                title: ""
-            }
-        };
-    },
-    
-    setAlarm10Defaults = function() {
-        state.Alarm10 = {
             now: {
                 day: 1,
                 month: "",
@@ -292,77 +175,10 @@ var Calendar = Calendar || (function() {
                     calmenu();
                 }
             } else if (args[0]=="!alarm") {
-                switch (Number(args[1])) {
-                    case 1:
-                        if (!args[2]) {
-                            alarmmenu(1);
-                        } else {
-                            setAlarm(1,args[2]);
-                        }
-                        return;
-                    case 2:
-                        if (!args[2]) {
-                            alarmmenu(2);
-                        } else {
-                            setAlarm(2,args[2]);
-                        }
-                        return;
-                    case 3:
-                        if (!args[2]) {
-                            alarmmenu(3);
-                        } else {
-                            setAlarm(3,args[2]);
-                        }
-                        return;
-                    case 4:
-                        if (!args[2]) {
-                            alarmmenu(4);
-                        } else {
-                            setAlarm(4,args[2]);
-                        }
-                        return;
-                    case 5:
-                        if (!args[2]) {
-                            alarmmenu(5);
-                        } else {
-                            setAlarm(5,args[2]);
-                        }
-                        return;
-                    case 6:
-                        if (!args[2]) {
-                            alarmmenu(6);
-                        } else {
-                            setAlarm(6,args[2]);
-                        }
-                        return;
-                    case 7:
-                        if (!args[2]) {
-                            alarmmenu(7);
-                        } else {
-                            setAlarm(7,args[2]);
-                        }
-                        return;
-                    case 8:
-                        if (!args[2]) {
-                            alarmmenu(8);
-                        } else {
-                            setAlarm(8,args[2]);
-                        }
-                        return;
-                    case 9:
-                        if (!args[2]) {
-                            alarmmenu(9);
-                        } else {
-                            setAlarm(9,args[2]);
-                        }
-                        return;
-                    case 10:
-                        if (!args[2]) {
-                            alarmmenu(10);
-                        } else {
-                            setAlarm(10,args[2]);
-                        }
-                        return;
+                if (!args[2]) {
+                    alarmmenu(args[1]);
+                } else {
+                    createAlarm(args[1],args[2]);
                 }
             }
         } else if (!playerIsGM(msg.playerid)) {
@@ -434,7 +250,7 @@ var Calendar = Calendar || (function() {
         );
     },
 
-    alarmmenu = function(num) {
+    alarmmenu = function(num,title,date,time) {
         var divstyle = 'style="width: 220px; border: 1px solid black; background-color: #ffffff; padding: 5px;"';
         var astyle1 = 'style="text-align:center; border: 1px solid black; margin: 1px; background-color: #7E2D40; border-radius: 4px;  box-shadow: 1px 1px 1px #707070; width: 100px;';
         var astyle2 = 'style="text-align:center; border: 1px solid black; margin: 1px; background-color: #7E2D40; border-radius: 4px;  box-shadow: 1px 1px 1px #707070; width: 150px;';
@@ -443,76 +259,98 @@ var Calendar = Calendar || (function() {
         var headstyle = 'style="color: rgb(126, 45, 64); font-size: 18px; text-align: left; font-variant: small-caps; font-family: Times, serif;"';
         var substyle = 'style="font-size: 11px; line-height: 13px; margin-top: -3px; font-style: italic;"';
         var tdstyle = 'style="padding: 2px; padding-left: 5px; border: none;"';
-        let title;
-        let date;
-        let time;
-        switch (num) {
-            case 1:
-
-                return;
-            case 2:
-
-                return;
-            case 3:
-
-                return;
-            case 4:
-
-                return;
-            case 5:
-
-                return;
-            case 6:
-
-                return;
-            case 7:
-
-                return;
-            case 8:
-
-                return;
-            case 9:
-
-                return;
-            case 10:
-
-                return;
+        num=Number(num);
+        if (title && date && time) {
+            let splitDate=date.split('.');
+            let splitTime=time.split(':');
+            sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                '<div ' + headstyle + '>Alarm</div>' + //--
+                '<div ' + substyle + '>Menu</div>' + //--
+                '<div ' + arrowstyle + '></div>' + //--
+                '<table ' + tablestyle + '>' + //--
+                '<tr><td ' + tdstyle + '>Alarm: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!alarm --?{Number?|'+num+'}">' + num + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Title: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!alarm --' + num + ' --title ?{Title?|'+title+'}">' + title + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Date: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!alarm --' + num + ' --date ?{Day?|'+splitDate[0]+'}.?{Month?|'+splitDate[1]+'}.?{Year?|'+splitDate[2]+'}">' + date + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Time: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!alarm --' + num + ' --time ?{Hour?|'+splitTime[0]+'}:?{Minute?|'+splitTime[1]+'}">' + time + '</a></td></tr>' + //--
+                '</table>' + //--
+                '</div>'
+            );
+        } else {
+            getAlarm(num);
         }
+    },
+
+    createAlarm = function(num,type) {
+        num=Number(num.replace("num ",""));
+        let alarm=findObjs({
+            _type: "handout",
+            name: "Alarm #"+num
+        }, {caseInsensitive: true})[0];
+        if (!alarm) {
+            alarm=createObj("handout",{
+                name: "Alarm #"+num
+            });
+        }
+        if (type.includes("title")) {
+            type=type.replace("title ","");
+            alarm.set("notes",type);
+        } else if (type.includes("date")) {
+            type=type.replace("date ","");
+            alarm.get("gmnotes",function(gmnotes) {
+                let notes=String(gmnotes);
+                if (notes.includes(";")) {
+                    notes=notes.split(';');
+                    alarm.set("gmnotes",type+';'+notes[1]);
+                } else {
+                    alarm.set("gmnotes",type+";");
+                }
+            });
+        } else if (type.includes("time")) {
+            type=type.replace("time ","");
+            alarm.get("gmnotes",function(gmnotes) {
+                let notes=String(gmnotes);
+                if (notes.includes(";")) {
+                    notes=notes.split(';');
+                    alarm.set("gmnotes",notes[0]+';'+type);
+                } else {
+                    alarm.set("gmnotes",";"+type);
+                }
+            });
+        }
+    },
+
+    getAlarm = function(num) {
+        let alarm=findObjs({
+            _type: "handout",
+            name: "Alarm #"+num
+        }, {caseInsensitive: true})[0];
+        if (!alarm) {
+            sendChat("Calendar","/w gm Could not find an Alarm with that Number!");
+        } else {
+            alarm.get("notes",function(notes) {
+                let title=String(notes);
+                alarm.get("gmnotes",function(gmnotes) {
+                    let datetime=String(gmnotes);
+                    datetime=datetime.split(';');
+                    let date=String(datetime[0]);
+                    let time=String(datetime[1]);
+                    alarmmenu(num,title,date,time);
+                });
+            });
+        }
+    },
+    chkalarms = function() {
+        let alarms=findObjs({
+            _type: 'handout'
+        });
     },
 
     checkInstall = function() {
         if (!state.Calendar) {
             setDefaults();
         }
-        if (!state.Alarm1) {
-            setAlarm1Defaults();
-        }
-        if (!state.Alarm2) {
-            setAlarm2Defaults();
-        }
-        if (!state.Alarm3) {
-            setAlarm3Defaults();
-        }
-        if (!state.Alarm4) {
-            setAlarm4Defaults();
-        }
-        if (!state.Alarm5) {
-            setAlarm5Defaults();
-        }
-        if (!state.Alarm6) {
-            setAlarm6Defaults();
-        }
-        if (!state.Alarm7) {
-            setAlarm7Defaults();
-        }
-        if (!state.Alarm8) {
-            setAlarm8Defaults();
-        }
-        if (!state.Alarm9) {
-            setAlarm9Defaults();
-        }
-        if (!state.Alarm10) {
-            setAlarm10Defaults();
+        if (!state.Alarm) {
+            setAlarmDefaults();
         }
     },
 
