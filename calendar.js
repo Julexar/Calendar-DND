@@ -10,7 +10,7 @@
 var Calendar = Calendar || (function() {
     'use strict';
     
-    var version = '4.1',
+    var version = '4.2',
     
     setDefaults = function() {
         state.Calendar = {
@@ -982,8 +982,8 @@ var Calendar = Calendar || (function() {
     chkalarm1 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm1.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm1.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm1.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm1.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm1.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm1.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm1.now.title}<< triggered!`);
                     }
                 }
@@ -994,8 +994,8 @@ var Calendar = Calendar || (function() {
     chkalarm2 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm2.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm2.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm2.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm2.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm2.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm2.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm2.now.title}<< triggered!`);
                     }
                 }
@@ -1006,8 +1006,8 @@ var Calendar = Calendar || (function() {
     chkalarm3 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm3.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm3.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm3.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm3.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm3.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm3.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm3.now.title}<< triggered!`);
                     }
                 }
@@ -1018,8 +1018,8 @@ var Calendar = Calendar || (function() {
     chkalarm4 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm4.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm4.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm4.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm4.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm4.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm4.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm4.now.title}<< triggered!`);
                     }
                 }
@@ -1030,8 +1030,8 @@ var Calendar = Calendar || (function() {
     chkalarm5 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm5.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm5.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm5.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm5.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm5.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm5.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm5.now.title}<< triggered!`);
                     }
                 }
@@ -1042,8 +1042,8 @@ var Calendar = Calendar || (function() {
     chkalarm6 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm6.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm6.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm6.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm6.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm6.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm6.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm6.now.title}<< triggered!`);
                     }
                 }
@@ -1054,8 +1054,8 @@ var Calendar = Calendar || (function() {
     chkalarm7 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm7.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm7.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm7.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm7.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm7.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm7.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm7.now.title}<< triggered!`);
                     }
                 }
@@ -1066,8 +1066,8 @@ var Calendar = Calendar || (function() {
     chkalarm8 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm8.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm8.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm8.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm8.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm8.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm8.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm8.now.title}<< triggered!`);
                     }
                 }
@@ -1078,8 +1078,8 @@ var Calendar = Calendar || (function() {
     chkalarm9 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm9.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm9.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm9.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm9.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm9.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm9.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm9.now.title}<< triggered!`);
                     }
                 }
@@ -1090,8 +1090,8 @@ var Calendar = Calendar || (function() {
     chkalarm10 = function() {
         if (Number(state.Calendar.now.year)==Number(state.Alarm10.now.year)) {
             if (Number(state.Calendar.now.ordinal)==Number(state.Alarm10.now.day)) {
-                if (Number(state.Calendar.now.hour)==Number(state.Alarm10.now.hour)) {
-                    if (Number(state.Calendar.now.minute)==Number(state.Alarm10.now.minute)) {
+                if (Number(state.Calendar.now.hour)>=Number(state.Alarm10.now.hour)) {
+                    if (Number(state.Calendar.now.minute)>=Number(state.Alarm10.now.minute)) {
                         sendChat("Calendar",`/w gm Alarm >>${state.Alarm10.now.title}<< triggered!`);
                     }
                 }
