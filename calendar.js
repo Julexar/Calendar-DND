@@ -22,7 +22,7 @@ API Commands:
 var Calendar = Calendar || (function() {
     'use strict';
     
-    var version = "5.0a",
+    var version = "5.0b",
     
     setDefaults = function() {
         state.calendar = {
