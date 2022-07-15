@@ -7,16 +7,16 @@ API Commands:
 !cal - Shows the menu to the person that issued the Command. GM menu has more Options.
     --world {world}- Allows the GM to change the world to one of the Options (Eberron, Faerun, Greyhawk, Modern, Tal'Dorei)
     --adv {type} --{amount} - Allows the GM to advance the time by a certain amount and a certain type (Short Rest, Long Rest, Hour, Minute, Day, Week, Month, Year)
-    --set {type} --{amount} - Allows the GM to set the day, month, year etc. Putting "random" in either will randomise it.
+    --set {type} --{amount} - Allows the GM to set the day, month, year etc.
     --weather {type} - Allows the GM to set the weather. Putting "Random" will randomise the weather.
     --toggle {weather/moon} - Allows the GM to toggle the weather and moon Display.
     --moon {type} - Allows the GM to set the moon state. Putting "Random" will randomise it.
-    --enc - Rolls on the Encounter table.
+    --enc - Rolls on the Encounter table. (coming soon)
     --reset - Will reset everything.
 !alarm --{number} - Lets you set a specific Alarm. Type a number from 1 to 10 in {number}.
     --title {title} - Sets the title of the Alarm.
-    --date {date} - Sets the Alarm to a certain date. This uses the following format: DD.MM.YYYY
-    --time {time} - Sets the Alarm for a certain time. This uses the following format (24 Hour): HH:MM
+    --date {date} - Sets the Alarm to a certain date. This uses the following format: DD.MM.YYYY (type the name of the month, number support coming soon)
+    --time {time} - Sets the Alarm to a certain time. This uses the following format (24 Hour): HH:MM
 */
 var Calendar = Calendar || (function() {
     'use strict';
