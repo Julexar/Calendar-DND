@@ -21,7 +21,7 @@ API Commands:
 var Calendar = Calendar || (function() {
     'use strict';
     
-    var version = "5.0b",
+    var version = "5.0c",
     
     setDefaults = function() {
         state.calendar = {
@@ -1138,6 +1138,29 @@ var Calendar = Calendar || (function() {
                 break;
         }
         return moon;
+    },
+
+    getWorld = function() {
+        let worldnum=state.calendar.now.world;
+        let world;
+        switch (worldnum) {
+            case 1:
+                world="Faerûn";
+            break;
+            case 2:
+                world="Greyhawk";
+            break;
+            case 3:
+                world="Modern";
+            break;
+            case 4:
+                world="Eberron";
+            break;
+            case 5:
+                world="Tal\'Dorei";
+            break;
+        }
+        return world;
     },
 
     checkInstall = function() {
