@@ -167,21 +167,21 @@ var Calendar = Calendar || (function() {
                 } else if ((args[1].toLowerCase()).includes("toggle")) {
                     let type=args[1].replace("toggle ","");
                     if (type=="weather") {
-                        switch (state.Calendar.now.wtype) {
+                        switch (state.calendar.now.wtype) {
                             case 'ON':
-                                state.Calendar.now.wtype="OFF";
+                                state.calendar.now.wtype="OFF";
                                 return;
                             case 'OFF':
-                                state.Calendar.now.wtype="ON";
+                                state.calendar.now.wtype="ON";
                                 return;
                         }
                     } else if (type=="moon") {
-                        switch (state.Calendar.now.mtype) {
+                        switch (state.calendar.now.mtype) {
                             case 'ON':
-                                state.Calendar.now.mtype="OFF";
+                                state.calendar.now.mtype="OFF";
                                 return;
                             case 'OFF':
-                                state.Calendar.now.mtype="ON";
+                                state.calendar.now.mtype="ON";
                                 return;
                         }
                     }
@@ -257,18 +257,18 @@ var Calendar = Calendar || (function() {
             min="0"+min;
         }
         let weather;
-        switch (state.Calendar.now.wtype) {
+        switch (state.calendar.now.wtype) {
             case 'ON':
-                weather=state.Calendar.now.weather;
+                weather=state.calendar.now.weather;
                 break;
             case 'OFF':
                 weather=undefined;
                 break;
         }
         let moon;
-        switch (state.Calendar.now.mtype) {
+        switch (state.calendar.now.mtype) {
             case 'ON':
-                moon=state.Calendar.now.moon;
+                moon=state.calendar.now.moon;
                 break;
             case 'OFF':
                 moon=undefined;
@@ -427,12 +427,12 @@ var Calendar = Calendar || (function() {
 
     showcal = function() {
         var nowDate;
-        var ordinal=state.Calendar.now.ordinal;
+        var ordinal=state.calendar.now.ordinal;
         var moon;
-        switch (state.Calendar.now.world) {
+        switch (state.calendar.now.world) {
             case 1:
                 nowDate=getFaerunDate(ordinal).split(',');
-                if (state.Calendar.now.mtype=="ON") {
+                if (state.calendar.now.mtype=="ON") {
                     moon = '<table style = "border: none;"><tr><td style="border: none; padding: 2px; padding-left: 5px;">Moon:</td><td style="border: none; padding: 2px; padding-left: 5px;">'+state.Calendar.now.moonImg+'</table>';
                 } else {
                     moon=undefined;
@@ -440,7 +440,7 @@ var Calendar = Calendar || (function() {
                 break;
             case 2:
                 nowDate=getGreyhawkDate(ordinal).split(',');
-                if (state.Calendar.now.mtype=="ON") {
+                if (state.calendar.now.mtype=="ON") {
                     moon = '<table style = "border: none;"><tr><td style="border: none; padding: 2px; padding-left: 5px;">Moon:</td><td style="border: none; padding: 2px; padding-left: 5px;">'+state.Calendar.now.moonImg+'</table>';
                 } else {
                     moon=undefined;
@@ -466,9 +466,9 @@ var Calendar = Calendar || (function() {
         var headstyle = 'style="color: ' + colour + '; font-size: 18px; text-align: left; font-variant: small-caps; font-family: Times, serif;"';
         var substyle = 'style="font-size: 11px; line-height: 13px; margin-top: -3px; font-style: italic;"';
         var weather;
-        if (state.Calendar.now.wtype=="ON") {
-            weather=state.Calendar.now.weather;
-        } else if (state.Calendar.now.wtype=="OFF") {
+        if (state.calendar.now.wtype=="ON") {
+            weather=state.calendar.now.weather;
+        } else if (state.calendar.now.wtype=="OFF") {
             weather=undefined;
         }
 
@@ -515,7 +515,7 @@ var Calendar = Calendar || (function() {
                             let month=date[1];
                             let year=date[2];
                             time=String(time).split(':');
-                            switch (state.Calendar.now.world) {
+                            switch (state.calendar.now.world) {
                                 case 1:
                                     //Faerun Check
                                     if (month=="1"||month=="01"||month==1) {
@@ -548,11 +548,11 @@ var Calendar = Calendar || (function() {
                                     if (time) {
                                         hour=Number(time[0]);
                                         minute=Number(time[1]);
-                                        if (year>=state.Calendar.now.year) {
-                                            if (month==state.Calendar.now.month) {
-                                                if (day>=state.Calendar.now.day) {
-                                                    if (hour>=state.Calendar.now.hour) {
-                                                        if (minute>=state.Calendar.now.minute) {
+                                        if (year>=state.calendar.now.year) {
+                                            if (month==state.calendar.now.month) {
+                                                if (day>=state.calendar.now.day) {
+                                                    if (hour>=state.calendar.now.hour) {
+                                                        if (minute>=state.calendar.now.minute) {
                                                             sendChat("Calendar","/w gm "+name+": "+title+" triggered!");
                                                             alarm.remove();
                                                         }
@@ -561,9 +561,9 @@ var Calendar = Calendar || (function() {
                                             }
                                         }
                                     } else {
-                                        if (year>=state.Calendar.now.year) {
-                                            if (month==state.Calendar.now.month) {
-                                                if (day>=state.Calendar.now.day) {
+                                        if (year>=state.calendar.now.year) {
+                                            if (month==state.calendar.now.month) {
+                                                if (day>=state.calendar.now.day) {
                                                     sendChat("Calendar","/w gm "+name+": "+title+" triggered!");
                                                     alarm.remove();
                                                 }
@@ -592,10 +592,10 @@ var Calendar = Calendar || (function() {
     },
 
     addtime = function(amount,type) {
-        var hour=state.Calendar.now.hour;
-        var minute=state.Calendar.now.minute;
-        var day=state.Calendar.now.ordinal;
-        var year=state.Calendar.now.year;
+        var hour=state.calendar.now.hour;
+        var minute=state.calendar.now.minute;
+        var day=state.calendar.now.ordinal;
+        var year=state.calendar.now.year;
         if (type=="minute") {
             var newmin=Number(minute)+Number(amount);
             while (newmin>59) {
@@ -621,21 +621,21 @@ var Calendar = Calendar || (function() {
                 year++;
             }
         }
-        state.Calendar.now.hour=hour;
-        state.Calendar.now.minute=minute;
-        state.Calendar.now.ordinal=ordinal;
-        state.Calendar.now.year=year;
+        state.calendar.now.hour=hour;
+        state.calendar.now.minute=minute;
+        state.calendar.now.ordinal=ordinal;
+        state.calendar.now.year=year;
     },
 
     advdate = function(amount,type) {
-        var ordinal=state.Calendar.now.ordinal;
-        var day=state.Calendar.now.day;
-        var month=state.Calendar.now.month;
-        var year=state.Calendar.now.year;
+        var ordinal=state.calendar.now.ordinal;
+        var day=state.calendar.now.day;
+        var month=state.calendar.now.month;
+        var year=state.calendar.now.year;
         var monthlist;
         var monthNum;
         amount=Number(amount);
-        switch (state.Calendar.now.world) {
+        switch (state.calendar.now.world) {
             case 1:
                 monthlist=["Hammer","Alturiak","Ches","Tarsakh","Mirtul","Kythorn","Flamerule","Eleasias","Eleint","Marpenoth","Uktar","Nightal"];
                 for (let i=0;i<monthlist.length();i++) {
@@ -686,10 +686,10 @@ var Calendar = Calendar || (function() {
         } else if (type=="year") {
             year+=amount;
         }
-        state.Calendar.now.ordinal=ordinal;
-        state.Calendar.now.day=day;
-        state.Calendar.now.month=month;
-        state.Calendar.now.year=year;
+        state.calendar.now.ordinal=ordinal;
+        state.calendar.now.day=day;
+        state.calendar.now.month=month;
+        state.calendar.now.year=year;
     },
 
     getFaerunDate = function(ordinal) {
@@ -754,7 +754,7 @@ var Calendar = Calendar || (function() {
     },
 
     getFaerunOrdinal = function(day,month) {
-        let ordinal = state.Calendar.now.ordinal;
+        let ordinal = state.calendar.now.ordinal;
         switch (month) {
             case 'Hammer':
                 ordinal=day;
@@ -793,7 +793,7 @@ var Calendar = Calendar || (function() {
                 ordinal=330+day;
                 break;
         }
-        state.Calendar.now.ordinal=ordinal;
+        state.calendar.now.ordinal=ordinal;
     },
 
     getGreyhawkOrdinal = function(day,month) {
@@ -827,12 +827,12 @@ var Calendar = Calendar || (function() {
     },
 
     weather = function(type) {
-        if (state.Calendar.now.wtype=="ON") {
+        if (state.calendar.now.wtype=="ON") {
             var temp;
             var wind;
             var precip;
             var season;
-            var ordinal=state.Calendar.now.ordinal;
+            var ordinal=state.calendar.now.ordinal;
             if (ordinal>330 || ordinal<=75) {
                 season="Winter";
             } else if (ordinal<=170) {
@@ -920,20 +920,20 @@ var Calendar = Calendar || (function() {
                     }
                 }
                 var forecast=temp+wind+precip;
-                state.Calendar.now.weather=forecast;
+                state.calendar.now.weather=forecast;
             } else {
-                state.Calendar.now.weather=type;
+                state.calendar.now.weather=type;
             }
         }
     },
 
     moon = function(type) {
         if (type!=="random") {
-            var year=state.Calendar.now.year;
-            var ordinal=state.Calendar.now.ordinal;
+            var year=state.calendar.now.year;
+            var ordinal=state.calendar.now.ordinal;
             var array;
             var moon;
-            if (state.Calendar.now.world==1) {
+            if (state.calendar.now.world==1) {
                 var remainder = year/4 - Math.floor(year/4);
                 if(remainder==0.25) {
                     array='array2';
@@ -951,7 +951,7 @@ var Calendar = Calendar || (function() {
                 var full = moonNO[ordinal];
                 var counter = 0;
                 var nextDay = Number(ordinal)+1;    
-                if (state.Calendar.now.mtype=="ON") {
+                if (state.calendar.now.mtype=="ON") {
                     while(full != 1){
                         if (nextDay > 360){
                             nextDay-=360;
@@ -977,7 +977,7 @@ var Calendar = Calendar || (function() {
                     countStatement = '<tr><td colspan="2" style = "border:none; padding: 5px;">Days until full moon: '+counter+'</td></tr>';
                 }
                 moon = '<img src="'+getMoon(moonImg)+'" style="width:30px;height:30px;"></td></tr>';
-                state.Calendar.now.moonImg=moon;
+                state.calendar.now.moonImg=moon;
             } else if (state.Calendar.now.world==2) {
                 var lunaArray = '0,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7,7,8,8,9,10,10,11,12,12,13,13,14,14,15,15,16,16,1,2,2,3,4,4,5,5,6,6,7';
                 var celeneArray = '0,16,16,16,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,5,6,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,9,9,10,10,10,10,10,10,10,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,14,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,5,6,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,9,9,10,10,10,10,10,10,10,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,14,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,5,6,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,9,9,10,10,10,10,10,10,10,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,14,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,1,2,2,2,2,2,2,2,3,3,3,3,3,3,3,4,4,4,4,4,4,4,5,6,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,9,9,10,10,10,10,10,10,10,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,13,14,14,14,14,14,14,14,15,15,15,15,15,15,15,16,16,16,16,16';
@@ -991,10 +991,10 @@ var Calendar = Calendar || (function() {
                 var Celene = getMoon(celeneImg);
                 
                 var moon = '<img src="'+Luna+'" style="width:40px;height:40px;"><img src="'+Celene+'" style="width:30px;height:30px;"></td></tr>';
-                state.Calendar.now.moonImg=moon;
+                state.calendar.now.moonImg=moon;
             }
         } else {
-            if (state.Calendar.now.world==1) {
+            if (state.calendar.now.world==1) {
                 switch (type) {
                     case 'full moon':
                         moon = '<img src="'+getMoon(1)+'" style="width:30px;height:30px;"></td></tr>';
@@ -1021,7 +1021,7 @@ var Calendar = Calendar || (function() {
                         moon = '<img src="'+getMoon(14)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
                 }
-                state.Calendar.now.moonImg=moon;
+                state.calendar.now.moonImg=moon;
             } else if (state.Calendar.now.world==2) {
                 //Eberron Moon
             }
@@ -1164,7 +1164,7 @@ var Calendar = Calendar || (function() {
     },
 
     checkInstall = function() {
-        if (!state.Calendar) {
+        if (!state.calendar) {
             setDefaults();
         }
         if (!state.Alarm) {
