@@ -12,6 +12,7 @@ API Commands:
     --moon {type} - Allows the GM to set the moon state. Putting "Random" will randomise it.
     --enc - Rolls on the Encounter table. (coming soon)
     --reset - Will reset everything.
+!showcal - Shows the Calendar to the Players.
 !alarm --{number} - Lets you set a specific Alarm. Type a number from 1 to 10 in {number}.
     --title {title} - Sets the title of the Alarm.
     --date {date} - Sets the Alarm to a certain date. This uses the following format: DD.MM.YYYY (type the name of the month, number support coming soon)
@@ -83,33 +84,51 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
                             } else if (option.includes("tal")) {
                                 state.MWCalendar.now.world=5;
                             }
+                            calmenu();
+                            chkalarms();
                         } else if (args[1].includes("adv")) {
                             let type=String(args[1].toLowerCase()).replace("adv ","");
                             let amount=Number(args[2]);
                             switch (type) {
                                 case 'short rest':
                                     addtime(amount,"hour");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'long rest':
                                     addtime(amount*8,"hour");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'hour':
                                     addtime(amount,"hour");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'minute':
                                     addtime(amount,"minute");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'day':
                                     advdate(amount,"day");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'weel':
                                     advdate(amount*7,"day");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'month':
                                     advdate(amount,"month");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                                 case 'year':
                                     advdate(amount,"year");
+                                    calmenu();
+                                    chkalarms();
                                     return;
                             }
                         } else if (args[1].includes("set")) {
@@ -160,32 +179,27 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
                             }
                             calmenu();
                             chkalarms();
+                        } else if (args[1].includes("toggle")) {
+                            let type=args[1].replace("toggle ","");
+                            if (type=="weather") {
+                                if (state.MWCalendar.now.wtype=="ON") {
+                                    state.MWCalendar.now.wtype="OFF";
+                                } else if (state.MWCalendar.now.wtype=="OFF") {
+                                    state.MWCalendar.now.wtype="ON";
+                                }
+                            } else if (type=="moon") {
+                                if (state.MWCalendar.now.mtype=="ON") {
+                                    state.MWCalendar.now.mtype="OFF";
+                                } else if (state.MWCalendar.now.mtype=="OFF") {
+                                    state.MWCalendar.now.mtype="ON";
+                                }
+                            }
+                            calmenu();
+                            chkalarms();
                         } else if (args[1].includes("weather")) {
                             weather((args[1].toLowerCase()).replace("weather ",""));
                             calmenu();
                             chkalarms();
-                        } else if (args[1].includes("toggle")) {
-                            let type=args[1].replace("toggle ","");
-                            if (type=="weather") {
-                                switch (state.MWCalendar.now.wtype) {
-                                    case 'ON':
-                                        state.MWCalendar.now.wtype="OFF";
-                                        return;
-                                    case 'OFF':
-                                        state.MWCalendar.now.wtype="ON";
-                                        return;
-                                }
-                            } else if (type=="moon") {
-                                switch (state.MWCalendar.now.mtype) {
-                                    case 'ON':
-                                        state.MWCalendar.now.mtype="OFF";
-                                        return;
-                                    case 'OFF':
-                                        state.MWCalendar.now.mtype="ON";
-                                        return;
-                                }
-                            }
-                            calmenu();
                         } else if (args[1].includes("moon")) {
                             moon((args[1].toLowerCase()).replace("moon ",""));
                             calmenu();
@@ -279,88 +293,93 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
                 break;
             case 'OFF':
                 moon=undefined;
+                break;
         }
-        if (weather && moon) {
+        if (state.MWCalendar.now.wtype=="ON" && state.MWCalendar.now.mtype=="ON") {
             sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
-                '<div ' + headstyle + '>Calendar</div>' + //--
+                '<div ' + headstyle + '>Multi-World Calendar</div>' + //--
                 '<div ' + substyle + '>Menu</div>' + //--
                 '<div ' + arrowstyle + '></div>' + //--
                 '<table>' + //--
                 '<tr><td ' + tdstyle + '>World: </td><td ' + tdstyle + '>' + world + '</td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
-                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Moon: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --moon ?{Moon?|Full Moon|Waning Gibbous|Last Quarter|Waning Crescent|New Moon|Waxing Crescent|First Quarter|Waxing Gibbous|Random}">' + moon + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
+                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Moon: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --moon ?{Moon?|Full Moon|Waning Gibbous|Last Quarter|Waning Crescent|New Moon|Waxing Crescent|First Quarter|Waxing Gibbous|Random}">' + moon + '</a></td></tr>' + //--
                 '<tr><td ' + tdstyle + '>Weather: </td><td ' + tdstyle + '>' + weather + '</td></tr>' + //--
                 '</table>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --enc">Roll Encounter</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --enc">Roll Encounter</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle weather">Toggle Weather Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --weather ?{Weather?|Put Weather here, type Random to randomise}">Set Weather</a></div>' + //--
                 '<div style="text-align:center;"><a ' + astyle2 + '" href="!showcal">Show to Players</a></div>' + //--
                 '</div>'
             );
-        } else if (weather && !moon) {
+        } else if (state.MWCalendar.now.wtype=="ON" && state.MWCalendar.now.mtype=="OFF") {
             sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
-                '<div ' + headstyle + '>Calendar</div>' + //--
+                '<div ' + headstyle + '>Multi-World Calendar</div>' + //--
                 '<div ' + substyle + '>Menu</div>' + //--
                 '<div ' + arrowstyle + '></div>' + //--
-                '<table' + tablestyle + '>' + //--
+                '<table>' + //--
                 '<tr><td ' + tdstyle + '>World: </td><td ' + tdstyle + '>' + world + '</td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
-                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
+                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
                 '<tr><td ' + tdstyle + '>Weather: </td><td ' + tdstyle + '>' + weather + '</td></tr>' + //--
                 '</table>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --enc">Roll Encounter</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --enc">Roll Encounter</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle weather">Toggle Weather Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --weather ?{Weather?|Put Weather here, type Random to randomise}">Set Weather</a></div>' + //--
                 '<div style="text-align:center;"><a ' + astyle2 + '" href="!showcal">Show to Players</a></div>' + //--
                 '</div>'
             );
-        } else if (!weather && moon) {
+        } else if (state.MWCalendar.now.wtype=="OFF" && state.MWCalendar.now.mtype=="ON") {
             sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
-                '<div ' + headstyle + '>Calendar</div>' + //--
+                '<div ' + headstyle + '>Multi-World Calendar</div>' + //--
                 '<div ' + substyle + '>Menu</div>' + //--
                 '<div ' + arrowstyle + '></div>' + //--
-                '<table' + tablestyle + '>' + //--
+                '<table>' + //--
                 '<tr><td ' + tdstyle + '>World: </td><td ' + tdstyle + '>' + world + '</td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
-                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Moon: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --moon ?{Moon?|Full Moon|Waning Gibbous|Last Quarter|Waning Crescent|New Moon|Waxing Crescent|First Quarter|Waxing Gibbous|Random}">' + moon + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
+                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Moon: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --moon ?{Moon?|Full Moon|Waning Gibbous|Last Quarter|Waning Crescent|New Moon|Waxing Crescent|First Quarter|Waxing Gibbous|Random}">' + moon + '</a></td></tr>' + //--
                 '</table>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --enc">Roll Encounter</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --enc">Roll Encounter</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle weather">Toggle Weather Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --weather ?{Weather?|Put Weather here, type Random to randomise}">Set Weather</a></div>' + //--
                 '<div style="text-align:center;"><a ' + astyle2 + '" href="!showcal">Show to Players</a></div>' + //--
                 '</div>'
             );
-        } else if (!weather && !moon) {
+        } else if (state.MWCalendar.now.wtype=="OFF" && state.MWCalendar.now.mtype=="OFF") {
             sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
-                '<div ' + headstyle + '>Calendar</div>' + //--
+                '<div ' + headstyle + '>Multi-World Calendar</div>' + //--
                 '<div ' + substyle + '>Menu</div>' + //--
                 '<div ' + arrowstyle + '></div>' + //--
-                '<table' + tablestyle + '>' + //--
+                '<table>' + //--
                 '<tr><td ' + tdstyle + '>World: </td><td ' + tdstyle + '>' + world + '</td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
-                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
-                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Day --?{Day?|1}">' + day + suffix + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Month --' + moMenu + '">' + month + '</a></td></tr>' + //-- 
+                '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Hour --?{Hour?|'+state.MWCalendar.now.hour+'}">' + hour + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!mwcal --set Minute --?{Minute?|'+state.MWCalendar.now.minute+'}">' + min + '</a></td></tr>' + //--
                 '</table>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --enc">Roll Encounter</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
-                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --adv ?{Type?|Short Rest|Long Rest|Hour|Minute|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --enc">Roll Encounter</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle weather">Toggle Weather Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --toggle moon">Toggle Moon Display</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!mwcal --weather ?{Weather?|Put Weather here, type Random to randomise}">Set Weather</a></div>' + //--
                 '<div style="text-align:center;"><a ' + astyle2 + '" href="!showcal">Show to Players</a></div>' + //--
                 '</div>'
             );
@@ -706,7 +725,7 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
         switch (state.MWCalendar.now.world) {
             case 1:
                 monthlist=["Hammer","Alturiak","Ches","Tarsakh","Mirtul","Kythorn","Flamerule","Eleasias","Eleint","Marpenoth","Uktar","Nightal"];
-                for (let i=0;i<monthlist.length();i++) {
+                for (let i=0;i<monthlist.length;i++) {
                     if (month==monthlist[i]) {
                         monthNum=i+1;
                     }
@@ -801,6 +820,8 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
             month="Nightal";
             date=day-336;
         }
+        state.MWCalendar.now.month=month;
+        state.MWCalendar.now.day=date;
         var array=month+','+String(date);
         return array;
     },
@@ -930,7 +951,7 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
                 } else if (roll>=18 && roll<=20) {
                     switch (season) {
                         case 'Winter':
-                            temp="It is a warm cold winter day. ";
+                            temp="It is a mild winter day. ";
                             break;
                         case 'Spring':
                             temp="It is a hot spring day. ";
@@ -1046,29 +1067,30 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
             }
         } else {
             if (state.MWCalendar.now.world==1) {
+                type=randomInteger(8);
                 switch (type) {
-                    case 'full moon':
+                    case 1:
                         moon = '<img src="'+getMoon(1)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'waning gibbous':
+                    case 2:
                         moon = '<img src="'+getMoon(2)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'last quarter':
+                    case 3:
                         moon = '<img src="'+getMoon(5)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'waning crescent':
+                    case 4:
                         moon = '<img src="'+getMoon(6)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'new moon':
+                    case 5:
                         moon = '<img src="'+getMoon(9)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'waxing crescent':
+                    case 6:
                         moon = '<img src="'+getMoon(10)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'first quarter':
+                    case 7:
                         moon = '<img src="'+getMoon(13)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
-                    case 'waxing gibbous':
+                    case 8:
                         moon = '<img src="'+getMoon(14)+'" style="width:30px;height:30px;"></td></tr>';
                         break;
                 }
