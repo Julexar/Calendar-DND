@@ -21,7 +21,7 @@ API Commands:
 var MultiWorldCalendar = MultiWorldCalendar || (function() {
     'use strict';
 
-    var version = "5.0d",
+    var version = "5.0f",
 
     setDefaults = function() {
         state.MWCalendar = {
