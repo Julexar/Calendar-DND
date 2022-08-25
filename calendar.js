@@ -1,7 +1,6 @@
 /*
 Calendar for Eberron, Faerun, Greyhawk, Modern and Tal'Dorei Settings
 Original created by Kirsty (https://app.roll20.net/users/1165285/kirsty)
-Using NoteLog Script from Aaron (https://app.roll20.net/users/104025/the-aaron)
 API Commands:
 !mwcal - Shows the menu to the person that issued the Command. GM menu has more Options.
     --world {world}- Allows the GM to change the world to one of the Options (Eberron, Faerun, Greyhawk, Modern, Tal'Dorei)
