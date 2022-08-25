@@ -21,7 +21,7 @@ API Commands:
 var MultiWorldCalendar = MultiWorldCalendar || (function() {
     'use strict';
 
-    var version = "5.0f",
+    var version = "5.1",
 
     setDefaults = function() {
         state.MWCalendar = {
@@ -246,22 +246,25 @@ var MultiWorldCalendar = MultiWorldCalendar || (function() {
         var moMenu = getMoMenu();
         var ordinal = state.MWCalendar.now.ordinal;
         var nowDate;
+        nowDate=getFaerunDate(ordinal).split(',');
+        /*
         switch (Number(state.MWCalendar.now.world)) {
             case 1:
                 nowDate=getFaerunDate(ordinal).split(',');
                 break;
             case 2:
-                nowDate=getGreyhawkDate(ordinal).split(',');
+                //nowDate=getGreyhawkDate(ordinal).split(',');
                 break;
             case 3:
-                nowDate=getModernDate(ordinal).split(',');
+                //nowDate=getModernDate(ordinal).split(',');
                 break;
             case 4:
-                nowDate=getEberronDate(ordinal).split(',');
+                //nowDate=getEberronDate(ordinal).split(',');
                 break;
             case 5:
-                nowDate=getTalDate(ordinal).split(',');
+                //nowDate=getTalDate(ordinal).split(',');
                 break;
+                */
         }
         var month=nowDate[0];
         var day=nowDate[1];
