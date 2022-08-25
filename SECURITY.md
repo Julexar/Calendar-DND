@@ -14,7 +14,8 @@
 | 4.2   | :white_check_mark: |
 | 5.0b  | :x: |
 | 5.0c  | :x: |
-| 5.0d  | :white_check_mark: |
+| 5.0d  | :x: |
+| 5.1   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
