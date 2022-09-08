@@ -16,7 +16,8 @@
 | 5.0c  | :x: |
 | 5.0d  | :x: |
 | 5.1 - Faerûn | :x: |
-| 5.2 - Eberron | :white_check_mark: |
+| 5.2 - Eberron | :x: |
+| 5.3 - Eberron Hotfix | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
