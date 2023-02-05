@@ -2,15 +2,41 @@
 // Created by Kirsty (https://app.roll20.net/users/1165285/kirsty)
 // Updated by Julexar (https://app.roll20.net/users/9989180/julexar)
 
-// API Commands:
-// !cal - for the GM displays the menu in the chat window, for a player displays date, weather, moon, hour and minute
+/* API Commands:
+!cal - pulls up the Calendar Menu
+    --adv {type} --{amount} - Advances the Time.
+    --set {type} --{amount} - Sets the day, month, year etc.
+    --weather - Pulls up the Weather Menu
+        --setclimate {climate} - Sets the climate of the region
+        --setterrain {terrain} - Sets the terrain of the region
+        --setseason {season} - Sets the season of the region
+        --random - Sets a random Weather based on climate, terrain and season
+            --ignorepreset - Sets a completely random Weather, ignoring climate, terrain and season
+    --toggle weather/moon - Toggles the Weather/Moon Output
+    --moon {type} - Sets the Moon state.
+    --reset - Resets the Calendar to defaults
+    --show - Shows the Calendar to the Players
+!alarm - Pulls up the Alarm Menu
+    --{number} - Lets you view a certain Alarm
+        --set title/date/time --{title/date/time} - Lets you set the title/date/time of the Alarm
+        --rem - Removes the Alarm
+        --reset - Resets the selected Alarm
+    --new - Creates a new Alarm
+        --title {title} - Sets the Title of the new Alarm
+        --date {date} - Sets the Date of the new Alarm
+        --time {time} - Sets the Time of the new Alarm
+    --reset - Resets all Alarms
 
-// Red Colour: #7E2D40
+The following format is used:
+
+Time: HH:MM (24 Hour)
+Date: DD.MM.YYYY
+*/
 
 var Calendar = Calendar || (function() {
     'use strict';
     
-    var version = '4.2',
+    var version = '4.5',
     
     setDefaults = function() {
         state.Calendar = {
@@ -23,373 +49,353 @@ var Calendar = Calendar || (function() {
                 month: "",
                 hour: 5,
                 minute: 5,
-                weather: "It is a cool but sunny day"
+                wtype: "ON",
+                mtype: "ON",
+                moon: "",
+                moonImg: "",
+                prevType: "normal",
+                weather: "It is a cool but sunny day.",
+                climate: "temperate",
+                terrain: "forest",
+                season: "spring",
+                monlist: "Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasis|Eleint|Marpenoth|Uktar|Nightal",
             },
         };
     },
-    
-    setAlarm1Defaults = function() {
-        state.Alarm1 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };  
+
+    setTemperatureDefaults = function() {
+        state.temp = [
+            {
+                name: "fall arctic desert",
+                temps: [
+                    { high: 15, low: 2},
+                    //Add remaining temps
+                ],
+                wind: [
+                    { type: "calm breeze" },
+                    //Add remaining winds
+                ]
+            }
+            //Add remaining Regions, Temps, etc.
+        ]
     },
     
-    setAlarm2Defaults = function() {
-        state.Alarm2 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm3Defaults = function() {
-        state.Alarm3 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm4Defaults = function() {
-        state.Alarm4 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm5Defaults = function() {
-        state.Alarm5 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm6Defaults = function() {
-        state.Alarm6 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm7Defaults = function() {
-        state.Alarm7 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm8Defaults = function() {
-        state.Alarm8 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm9Defaults = function() {
-        state.Alarm9 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
-    },
-    
-    setAlarm10Defaults = function() {
-        state.Alarm10 = {
-            now: {
-                day: 1,
-                month: "",
-                year: 1486,
-                hour: 1,
-                minute: 1,
-                title: "",
-            },
-        };
+    setAlarmDefaults = function() {
+        state.Alarm = []; 
     },
    
     handleInput = function(msg) {
-        var args = msg.content.split(",");
+        var args = msg.content.split(/\s+--/);
         
         if (msg.type !== "api") {
 			return;
 		}
 		
-		if(playerIsGM(msg.playerid)){
+		if (playerIsGM(msg.playerid)){
 		    switch(args[0]) {
 		        case '!cal':
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!setday':
-                    getordinal(msg);
-                    weather();
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    weather();
-                    break;
-                case '!setmonth':
-                    getordinal(msg);
-                    weather();
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!setyear':
-                    state.Calendar.now.year=args[1];
-                    weather();
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!addday':
-                    addday(args[1]);
-                    weather();
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!sethour':
-                    state.Calendar.now.hour=args[1];
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!setminute':
-                    state.Calendar.now.minute=args[1];
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!advtime':
-                    advtime(args[1],args[2]);
-                    if (((args[1].toLowerCase()=="short rest" || args[1].toLowerCase()=="hours") && Number(args[2])>=8) || args[1].toLowerCase()=="long rest" || args[1].toLowerCase()=="months" || args[1].toLowerCase()=="days" || args[1].toLowerCase()=="years") {
-                        weather();
+                    if (!args[1]) {
+                        if (state.Calendar.now.wtype=="ON") {
+                            weather();
+                            if (state.Calendar.now.mytype=="ON") {
+                                moon(state.Calendar.now.prevType);
+                                calmenu();
+                                chkalarms();
+                            } else if (state.Calendar.now.mtype=="OFF") {
+                                calmenu();
+                                chkalarms();
+                            }
+                        } else if (state.Calendar.wtype=="OFF") {
+                            if (state.Calendar.now.mtype=="ON") {
+                                moon(state.Calendar.now.prevType);
+                                calmenu();
+                                chkalarms();
+                            } else if (state.Calendar.now.mtype=="OFF") {
+                                calmenu();
+                                chkalarms();
+                            }
+                        }
+                    } else if (args[1].includes("adv")) {
+                        let type=args[1].toLowerCase().replace("adv ","");
+                        let amount=Number(args[2].replace("amount ",""));
+                        if (!type.includes("min") && state.Calendar.now.wtype=="ON") {
+                            weather();
+                        }
+                        if ((!type.includes("min") && !type.includes("short")) && state.Calendar.now.mtype=="ON") {
+                            moon(state.Calendar.now.prevType);
+                        }
+                        advtime(type,amount);
+                        calmenu();
+                        chkalarms();
+                    } else if (args[1].includes("set")) {
+                        let type=args[1].toLowerCase().replace("set ","");
+                        let amount=Number(args[2].replace("amount ",""));
+                        if (!type.includes("min") && state.Calendar.now.wtype=="ON") {
+                            weather();
+                            if (state.Calendar.now.mtype=="ON") {
+                                moon(state.Calendar.now.prevType);
+                            }
+                        }
+                        setTime(type,amount);
+                        calmenu();
+                        chkalarms();
+                    } else if (args[1].includes("toggle")) {
+                        let option=args[1].replace("toggle ","");
+                        if (option=="weather") {
+                            if (state.Calendar.now.wtype=="ON") {
+                                state.Calendar.now.wtype="OFF";
+                                sendChat("Calendar","/w gm Weather has been toggled off.");
+                                calmenu();
+                                chkalarms();
+                            } else if (state.Calendar.now.wtype=="OFF") {
+                                state.Calendar.now.wtype="ON";
+                                sendChat("Calendar","/w gm Weather has been toggled on.");
+                                calmenu();
+                                chkalarms();
+                            }
+                        } else if (option=="moon") {
+                            if (state.Calendar.now.mtype=="ON") {
+                                state.Calendar.now.mtype="OFF";
+                                sendChat("Calendar","/w gm Moon has been toggled off.");
+                                calmenu();
+                                chkalarms();
+                            } else if (state.Calendar.now.mtype=="OFF") {
+                                state.Calendar.now.mtype="ON";
+                                sendChat("Calendar","/w gm Moon has been toggled on.");
+                                calmenu();
+                                chkalarms();
+                            }
+                        }
+                    } else if (args[1].includes("weather")) {
+                        if (!args[2]) {
+                            weatherMenu();
+                        } else if (args[2].includes("set")) {
+                            let climate,terrain,season;
+                            for (let i=2;i<args.length;i++) {
+                                if (args[i].includes("climate")) {
+                                    climate=args[i].replace("setclimate ","").toLowerCase();
+                                } else if (args[i].includes("terrain")) {
+                                    terrain=args[i].replace("setterrain ","").toLowerCase();
+                                } else if (args[i].includes("season")) {
+                                    season=args[i].replace("setseason ","").toLowerCase();
+                                }
+                            }
+                            calmenu();
+                            chkalarms();
+                        } else if (args[2]=="random") {
+                            if (!args[3]) {
+                                weather(state.Calendar.now.climate,state.Calendar.now.terrain,state.Calendar.now.season);
+                            } else if (args[3]=="ignorepreset") {
+                                weather();
+                            }
+                            calmenu();
+                            chkalarms();
+                        }
+                    } else if (args[1].includes("moon")) {
+                        let type=args[1].toLowerCase().replace("moon ","");
+                        if (type=="normal" || type=="random") {
+                            state.Calendar.now.prevType=type;
+                        } else if (type!=="" && type!==" ") {
+                            state.Calendar.now.prevType="custom";
+                        }
+                        moon(type);
+                        calmenu();
+                        chkalarms();
+                    } else if (args[1]=="reset") {
+                        setDefaults();
+                        sendChat("Calendar","/w gm Calendar has been reset.");
+                        calmenu();
+                        chkalarms();
+                    } else if (args[1]=="show") {
+                        showcal();
                     }
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!setalarm':
-                    setalarm(args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!weather':
-                    weather();
-                    calmenu();
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!playercal':
-                    showcal(msg);
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-                case '!enc':
-                    encounter(args[1]);
-                    chkalarm1();
-                    chkalarm2();
-                    chkalarm3();
-                    chkalarm4();
-                    chkalarm5();
-                    chkalarm6();
-                    chkalarm7();
-                    chkalarm8();
-                    chkalarm9();
-                    chkalarm10();
-                    break;
-    	    }
-		}else if(args[0]=='!cal'){
-		    showcal(msg);
-		}
+                return;
+                case '!alarm':
+                    if (!args[1]) {
+                        alarmMenu(args[1]);
+                    } else if (args[1]) {
+                        if (args[1]!=="new" && !args[1].includes("reset") && !args[1]=="" && !args[1]==" ") {
+                            let alarm=Number(args[1]);
+                            if (!args[2]) {
+                                alarmMenu(alarm);
+                            } else if (args[2].includes("set ")) {
+                                let option=args[2].replace("set ","").toLowerCase();
+                                if (!option.includes("title") && !option.includes("date") && !option.includes("time")) {
+                                    sendChat("Calendar","/w gm Invalid option, please use \`title\`, \`date\` or \`time\`!");
+                                } else {
+                                    let title,date,time;
+                                    for (let i=2;i<args.length;i+=2) {
+                                        if (args[i].includes("title")) {
+                                            title=args[i+1].replace("title ","");
+                                        } else if (args[i].includes("date")) {
+                                            date=args[i+1].replace("date ","");
+                                        } else if (args[i].includes("time")) {
+                                            time=args[i+1].replace("time ","");
+                                        }
+                                    }
+                                }
+                            } else if (args[2]=="rem") {
+                                removeAlarm(alarm);
+                            } else if (args[2]=="reset") {
+                                resetAlarm(alarm);
+                            }
+                        } else if (args[1].includes("new")) {
+                            let option=args[2].replace("set ","").toLowerCase();
+                            if (!option.includes("title") && !option.includes("date") && !option.includes("time")) {
+                                sendChat("Calendar","/w gm Invalid option, please use \`title\`, \`date\` or \`time\`!");
+                            } else {
+                                let title,date,time;
+                                for (let i=2;i<args.length;i++) {
+                                    if (args[i].includes("title")) {
+                                        title=args[i].replace("title ","");
+                                    } else if (args[i].includes("date")) {
+                                        date=args[i].replace("date ","");
+                                    } else if (args[i].includes("time")) {
+                                        time=args[i].replace("time ","");
+                                    }
+                                }
+                            }
+                        } else if (args[1]=="reset") {
+                            resetAlarm();
+                        }
+                    }
+                return;
+            }
+		} else if (!playerIsGM(msg.playerid)) {
+            if (args[0]=="!cal" || args[0]=="!showcal") {
+                showcal();
+            }
+        }
     },
     
     calmenu = function() {
-        var divstyle = 'style="width: 189px; border: 1px solid black; background-color: #ffffff; padding: 5px;"'
+        var divstyle = 'style="width: 220px; border: 1px solid black; background-color: #ffffff; padding: 5px;"';
         var astyle1 = 'style="text-align:center; border: 1px solid black; margin: 1px; background-color: #7E2D40; border-radius: 4px;  box-shadow: 1px 1px 1px #707070; width: 100px;';
         var astyle2 = 'style="text-align:center; border: 1px solid black; margin: 1px; background-color: #7E2D40; border-radius: 4px;  box-shadow: 1px 1px 1px #707070; width: 150px;';
         var tablestyle = 'style="text-align:center;"';
         var arrowstyle = 'style="border: none; border-top: 3px solid transparent; border-bottom: 3px solid transparent; border-left: 195px solid rgb(126, 45, 64); margin-bottom: 2px; margin-top: 2px;"';
         var headstyle = 'style="color: rgb(126, 45, 64); font-size: 18px; text-align: left; font-variant: small-caps; font-family: Times, serif;"';
         var substyle = 'style="font-size: 11px; line-height: 13px; margin-top: -3px; font-style: italic;"';
-        var down = state.Calendar.now.down;
-        down = getdown(down);
+        var tdstyle = 'style="padding: 2px; padding-left: 5px; border: none;"';
         var nowdate = getdate(state.Calendar.now.ordinal).split(',');
         var month = nowdate[0];
         var day = nowdate[1];
-        var moon = getmoon();
-        
-        
-        sendChat('Calendar', '/w gm <div ' + divstyle + '>' + //--
-            '<div ' + headstyle + '>Calendar</div>' + //--
-            '<div ' + substyle + '>Menu</div>' + //--
-            '<div ' + arrowstyle + '></div>' + //--
-            '<table>' + //--
-            '<tr><td>Day: </td><td><a ' + astyle1 + '" href="!setday,?{Day?|1},' + month +'">' + day + '</a></td></tr>' + //--
-            '<tr><td>Month: </td><td><a ' + astyle1 + '" href="!setmonth,' + day + ',?{Month|Hammer|Midwinter|Alturiak|Ches|Tarsakh|Greengrass|Mirtul|Kythorn|Flamerule|Midsummer|Eleasias|Eleint|Highharvestide|Marpenoth|Uktar|Feast of the Moon|Nightal}">' + month + '</a></td></tr>' + //--
-            '<tr><td>Year: </td><td><a ' + astyle1 + '" href="!setyear,?{Year?|1486}">' + state.Calendar.now.year + '</a></td></tr>' + //--
-            '<tr><td>Hour: </td><td><a ' + astyle1 + '" href="!sethour,?{Hour?|5}">' + state.Calendar.now.hour + '</a></td></tr>' + //--
-            '<tr><td>Minute: </td><td><a ' + astyle1 + '" href="!setminute,?{Minute?|5}">' + state.Calendar.now.minute + '</a></td></tr>' + //--
-            '</table>' + //--
-            '<br>Weather: ' + state.Calendar.now.weather + //--
-            '<br><br>Moon: ' + moon + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!advtime,?{Format of Time?|Short Rest|Long Rest|Days|Months|Years},?{Amount?|5}">Advance the Time</a></div>' + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!weather">Roll Weather</a></div>' + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!setalarm,?{Alarmnumber?|Alarm1|Alarm2|Alarm3|Alarm4|Alarm5|Alarm6|Alarm7|Alarm8|Alarm9|Alarm10},?{Day?|5},?{Month?|Hammer|Alturiak|Ches|Tarsakh|Mirtul|Kythorn|Flamerule|Eleasias|Eleint|Marpenoth|Uktar|Nightal},?{Year?|1486},?{Hour?|5},?{Minute?|5},?{Title?|1}">Set an Alarm</a></div>' + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!playercal">Show to Players</a></div>' + //--
-            '<div style="text-align:center;"><a ' + astyle2 + '" href="!enc,?{Location?|City|Wilderness}">Random Encounter</a></div>' + //--
-            '</div>'
-        );
+        var moon = state.Calendar.now.moon;
+        var weather = state.Calendar.now.weather;
+        var suffix = getsuffix(day);
+        var moList=state.Calendar.now.monlist;
+        var hour=state.Calendar.now.hour;
+        var min=state.Calendar.now.minute;
+        var year=state.Calendar.now.year;
+        if (hour<10) {
+            hour="0"+hour;
+        }
+        if (min<10) {
+            min="0"+min;
+        }
+        if (state.Calendar.now.wtype=="ON") {
+            if (state.Calendar.now.mtype=="ON") {
+                sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                    '<div ' + headstyle + '>Calendar Menu</div>' + //--
+                    '<div ' + arrowstyle + '></div>' + //--
+                    '<table>' + //--
+                    '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set day --?{Day?|'+day+'}">' +  day + suffix + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set month --?{Month?|' + moList + '}">' + month + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set hour --?{Hour?|'+hour+'}">' + hour + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set min --?{Minute?|'+min+'}">' + min + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Moon: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --moon ?{Moon?|Full|Waning Gibbours|Last Quarter|Waning Crescent|New|Waxing Crescent|First Quarter|Waxing Gibbous|Random|Normal}">' + moon + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Weather: </td><td ' + tdstyle + '>' + weather + '</td></tr>' + //--
+                    '</table>' + //--
+                    '<br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Minute|Hour|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather">Weather Menu</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!alarm">Alarm Menu</a></div>' + //--
+                    '<br><br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --show">Show to Players</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --reset">Reset Calendar</a></div>' + //--
+                    '</div>'
+                );
+            } else if (state.Calendar.now.mtype=="OFF") {
+                sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                    '<div ' + headstyle + '>Calendar Menu</div>' + //--
+                    '<div ' + arrowstyle + '></div>' + //--
+                    '<table>' + //--
+                    '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set day --?{Day?|'+day+'}">' +  day + suffix + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set month --?{Month?|' + moList + '}">' + month + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set hour --?{Hour?|'+hour+'}">' + hour + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set min --?{Minute?|'+min+'}">' + min + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Weather: </td><td ' + tdstyle + '>' + weather + '</td></tr>' + //--
+                    '</table>' + //--
+                    '<br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Minute|Hour|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather">Weather Menu</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!alarm">Alarm Menu</a></div>' + //--
+                    '<br><br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --show">Show to Players</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --reset">Reset Calendar</a></div>' + //--
+                    '</div>'
+                );
+            }
+        } else if (state.Calendar.now.wtype=="OFF") {
+            if (state.Calendar.now.mtype=="ON") {
+                sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                    '<div ' + headstyle + '>Calendar Menu</div>' + //--
+                    '<div ' + arrowstyle + '></div>' + //--
+                    '<table>' + //--
+                    '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set day --?{Day?|'+day+'}">' +  day + suffix + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set month --?{Month?|' + moList + '}">' + month + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set hour --?{Hour?|'+hour+'}">' + hour + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set min --?{Minute?|'+min+'}">' + min + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Moon: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --moon ?{Moon?|Full|Waning Gibbours|Last Quarter|Waning Crescent|New|Waxing Crescent|First Quarter|Waxing Gibbous|Random|Normal}">' + moon + '</a></td></tr>' + //--
+                    '</table>' + //--
+                    '<br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Minute|Hour|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather">Weather Menu</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!alarm">Alarm Menu</a></div>' + //--
+                    '<br><br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --show">Show to Players</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --reset">Reset Calendar</a></div>' + //--
+                    '</div>'
+                );
+            } else if (state.Calendar.now.mtype=="OFF") {
+                sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                    '<div ' + headstyle + '>Calendar Menu</div>' + //--
+                    '<div ' + arrowstyle + '></div>' + //--
+                    '<table>' + //--
+                    '<tr><td ' + tdstyle + '>Day: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set day --?{Day?|'+day+'}">' +  day + suffix + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Month: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set month --?{Month?|' + moList + '}">' + month + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Year: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set year --?{Year?|'+year+'}">' + year + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Hour: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set hour --?{Hour?|'+hour+'}">' + hour + '</a></td></tr>' + //--
+                    '<tr><td ' + tdstyle + '>Minute: </td><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --set min --?{Minute?|'+min+'}">' + min + '</a></td></tr>' + //--
+                    '</table>' + //--
+                    '<br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --adv ?{Type?|Short Rest|Long Rest|Minute|Hour|Day|Week|Month|Year} --?{Amount?|1}">Advance the Date</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather">Weather Menu</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle weather">Toggle Weather Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --toggle moon">Toggle Moon Display</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!alarm">Alarm Menu</a></div>' + //--
+                    '<br><br>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --show">Show to Players</a></div>' + //--
+                    '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --reset">Reset Calendar</a></div>' + //--
+                    '</div>'
+                );
+            }
+        }
     },
     
-    showcal = function(msg) {
+    showcal = function() {
         var nowdate = getdate(state.Calendar.now.ordinal).split(',');
         var month = nowdate[0];
         var day = nowdate[1];
-        var down = state.Calendar.now.down;
-            down = getdown(down);
         var suffix = getsuffix(day);
         var divstyle = 'style="width: 189px; border: 1px solid black; background-color: #ffffff; padding: 5px;"'
         var tablestyle = 'style="text-align:center;"';
@@ -412,7 +418,7 @@ var Calendar = Calendar || (function() {
         }
         
         
-        sendChat(msg.who, '<div ' + divstyle + '>' + //--
+        sendChat("Calendar", '<div ' + divstyle + '>' + //--
             '<div ' + headstyle + '>Calendar</div>' + //--
             '<div ' + substyle + '>Player View</div>' + //--
             '<div ' + arrowstyle + '></div>' + //--
@@ -479,6 +485,7 @@ var Calendar = Calendar || (function() {
         }
         state.Calendar.now.month=String(month);
         state.Calendar.now.day=date;
+        state.Calendar.now.ordinal=getordinal(month+","+date);
         var array=month+','+String(date);
         return array;    
     },
@@ -565,125 +572,121 @@ var Calendar = Calendar || (function() {
         return suffix;
     },
     
-    getdown = function(days) {
-        var down = Number(days);
-        var div = state.Calendar.now.div;
-        
-        if(div!=0){
-            down = down/div;
+    weatherMenu = function() {
+        var divstyle = 'style="width: 220px; border: 1px solid black; background-color: #ffffff; padding: 5px;"';
+        var astyle1 = 'style="text-align:center; border: 1px solid black; margin: 1px; background-color: #7E2D40; border-radius: 4px;  box-shadow: 1px 1px 1px #707070; width: 100px;';
+        var astyle2 = 'style="text-align:center; border: 1px solid black; margin: 1px; background-color: #7E2D40; border-radius: 4px;  box-shadow: 1px 1px 1px #707070; width: 150px;';
+        var tablestyle = 'style="text-align:center;"';
+        var arrowstyle = 'style="border: none; border-top: 3px solid transparent; border-bottom: 3px solid transparent; border-left: 195px solid rgb(126, 45, 64); margin-bottom: 2px; margin-top: 2px;"';
+        var headstyle = 'style="color: rgb(126, 45, 64); font-size: 18px; text-align: left; font-variant: small-caps; font-family: Times, serif;"';
+        var substyle = 'style="font-size: 11px; line-height: 13px; margin-top: -3px; font-style: italic;"';
+        var tdstyle = 'style="padding: 2px; padding-left: 5px; border: none;"';
+        if (state.Calendar.now.wtype=="ON") {
+            let climate=state.Calendar.now.climate;
+            let terrain=state.Calendar.now.terrain;
+            let season=state.Calendar.now.season;
+            sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                '<div ' + headstyle + '>Weather Menu</div>' + //--
+                '<div ' + arrowstyle + '></div>' + //--
+                '<div style="text-align:center;">Weather Display: <a ' + astyle1 + '" href="!cal --toggle weather">Toggle off</a></div>' + //--
+                '<br>' + //--
+                '<table>' + //--
+                '<tr><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --weather --setclimate ?{Climate?|Arctic|Subarctic|Subtropical|Temperate|Tropical}">' + climate + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --weather --setterrain ?{Terrain?|Desert|Forest|Hills|Mountains|Plains|Seacoast}">' + terrain + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --weather --setseason ?{Season?|Spring|Summer|Fall|Winter}">' + season + '</a></td></tr>' + //--
+                '</table>' + //--
+                '<br>' + //--
+                '<div style="text-align:center;">Current Weather</div>' + //--
+                '<div style="text-align:left;">' + state.Calendar.now.weather + '</div>' + //--
+                '<br><br>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather --random">Roll Weather</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather --random --ignorepreset">Random Weather</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal">Go Back</a></div>' + //--
+                '</div>'
+            );
+        } else if (state.Calendar.now.wtype=="OFF") {
+            sendChat("Calendar","/w gm <div " + divstyle + ">" + //--
+                '<div ' + headstyle + '>Weather Menu</div>' + //--
+                '<div ' + arrowstyle + '></div>' + //--
+                '<div style="text-align:center;">Weather Display: <a ' + astyle1 + '" href="!cal --toggle weather">Toggle on</a></div>' + //--
+                '<br>' + //--
+                '<table>' + //--
+                '<tr><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --weather --setclimate ?{Climate?|Arctic|Subarctic|Subtropical|Temperate|Tropical}">' + climate + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --weather --setterrain ?{Terrain?|Desert|Forest|Hills|Mountains|Plains|Seacoast}">' + terrain + '</a></td></tr>' + //--
+                '<tr><td ' + tdstyle + '><a ' + astyle1 + '" href="!cal --weather --setseason ?{Season?|Spring|Summer|Fall|Winter}">' + season + '</a></td></tr>' + //--
+                '</table>' + //--
+                '<br>' + //--
+                '<div style="text-align:center;">Current Weather</div>' + //--
+                '<div style="text-align:left;">' + state.Calendar.now.weather + '</div>' + //--
+                '<br><br>Info: Weather will not appear on Calendar!<br><br>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather --random">Roll Weather</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal --weather --random --ignorepreset">Random Weather</a></div>' + //--
+                '<div style="text-align:center;"><a ' + astyle2 + '" href="!cal">Go Back</a></div>' + //--
+                '</div>'
+            );
         }
-        
-        return down;
     },
-    
-    addday = function(add) {
-        var ordinal = Number(add);
-        
-        ordinal = ordinal + Number(state.Calendar.now.ordinal);
-        
-        state.Calendar.now.ordinal=ordinal;
-    },
-    
-    weather = function() {
-        var roll;
-        var temperature;
-        var wind;
-        var precipitation;
-        var season;
-        var ordinal = Number(state.Calendar.now.ordinal);
-        var rand;
-        var temrand;
-        
-        if(ordinal > 330 || ordinal <= 70){
-            season = 'Winter'
-        }else if(ordinal > 70 && ordinal <= 160){
-            season = 'Spring'
-        }else if(ordinal > 160 && ordinal <=250 ){
-            season = 'Summer'
-        }else if(ordinal > 250 && ordinal <=330 ){
-            season = 'Fall'
+
+    weather = function(climate,terrain,season) {
+        if (climate && terrain && season) {
+            let tempData = state.temp.find(t => t.name==`${season} ${climate} ${terrain}`);
+            let randomIndex = randomInteger(tempData.temps.length - 1);
+            let low = tempData.temps[randomIndex].low;
+            let high = tempData.temps[randomIndex].high;
+            randomIndex=randomInteger(tempsData.weather.length-1);
+            let forecast = "The sky is " + tempData.weather[randomIndex].type;
+            randomIndex=randomInteger(tempsData.wind.length-1);
+            let wind = "with " + tempData.wind[randomIndex].speed + tempData.wind[randomIndex].wind + `(${tempData.wind[randomIndex].direction}).`; 
+            let weather = `Today's Temperatures lay at a low of ${low}°C and a high of ${high}°C\n${forecast} ${wind}`;
+            state.Calendar.now.weather=weather;
+        } else if (!climate && !terrain && !season) {
+            let randomSeason = randomInteger(4);
+            let randomClimate = randomInteger(5);
+            let randomTerrain = randomInteger(6);
+            if (randomSeason==1) {
+                randomSeason="spring";
+            } else if (randomSeason==2) {
+                randomSeason="summer";
+            } else if (randomSeason==3) {
+                randomSeason="fall";
+            } else if (randomSeason==4) {
+                randomSeason="winter";
+            }
+            if (randomClimate==1) {
+                randomClimate="arctic";
+            } else if (randomClimate==2) {
+                randomClimate="subarctic";
+            } else if (randomClimate==3) {
+                randomClimate="subtropical";
+            } else if (randomClimate==4) {
+                randomClimate="temperate";
+            } else if (randomClimate==5) {
+                randomClimate="tropical";
+            }
+            if (randomTerrain==1) {
+                randomTerrain="desert";
+            } else if (randomTerrain==2) {
+                randomTerrain="forest";
+            } else if (randomTerrain==3) {
+                randomTerrain="hills";
+            } else if (randomTerrain==4) {
+                randomTerrain="mountains";
+            } else if (randomTerrain==5) {
+                randomTerrain="plains";
+            } else if (randomTerrain==6) {
+                randomTerrain="seacost";
+            }
+            let tempData = state.temp.find(t => t.name==`${randomSeason} ${randomClimate} ${randomTerrain}`);
+            let randomIndex = randomInteger(tempData.temps.length-1);
+            let low = tempData.temps[randomIndex].low;
+            let high = tempData.temps[randomIndex].high;
+            randomIndex=randomInteger(tempsData.weather.length-1);
+            let forecast = "The sky is " + tempData.weather[randomIndex].type;
+            randomIndex=randomInteger(tempsData.wind.length-1);
+            let wind = "with " + tempData.wind[randomIndex].speed + tempData.wind[randomIndex].wind + `(${tempData.wind[randomIndex].direction}).`; 
+            let weather = `Today's Temperatures lay at a low of ${low}°C and a high of ${high}°C\n${forecast} ${wind}`;
+            state.Calendar.now.weather=weather;
         }
-        rand=randomInteger(100);
-        temrand=randomInteger(100);
-        switch (season) {
-            case 'Summer':
-                if (temrand<=90) {
-                    temperature="It is an extremely hot summer day. It is recommended to drink more.";
-                } else {
-                    temperature="It is a hot summer day.";
-                }
-                if (rand<=70) {
-                    temperature+=" The weather is clear. There won't be any sandstorms today.";
-                } else if (rand<=80) {
-                    temperature+=" A sandstorm is raging outside. It will last the entire day.";
-                } else if (rand<=90) {
-                    temperature+=" A sandstorm is raging outside. It will last for half of the day.";
-                } else {
-                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
-                }
-                break;
-            case 'Spring':
-                if (temrand<=90) {
-                    //Hot
-                    temperature="It is a hot spring day.";
-                } else {
-                    //mild
-                    temperature="It is a mild spring day, staying hydrated is easier.";
-                }
-                if (rand<=80) {
-                    //No storm
-                    temperature+=" The weather is clear. There won't be any sandstorms today.";
-                } else if (rand<=90) {
-                    //Half day storm
-                    temperature+=" A sandstorm is raging outside. It will last for half of the day.";
-                } else {
-                    //8 hour storm
-                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
-                }
-                break;
-            case 'Fall':
-                if (temrand<=90) {
-                    //hot
-                    temperature="It is a hot fall day.";
-                } else {
-                    //mild
-                    temperature="It is a mild fall day, staying hydrated is easier.";
-                }
-                if (rand<=80) {
-                    //No storm
-                    temperature+=" The weather is clear. There won't be any sandstorms today.";
-                } else if (rand<=90) {
-                    //half day storm
-                    temperature+=" A sandstorm is raging outside. It will last for half of the day.";
-                } else {
-                    //8 hour storm
-                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
-                }
-                break;
-            case 'Winter':
-                if (temrand<=50) {
-                    //mild
-                    temperature="It is a mild winter day, staying hydrated is easier.";
-                } else if (temrand<=90) {
-                    //hot
-                    temperature="It is a hot winter day.";
-                } else {
-                    //rain
-                    temperature="It is a cooler winter day and it looks like it will rain.";
-                }
-                if (rand<=90) {
-                    //No storm
-                    temperature+=" The weather is clear. There won't be any sandstorms today.";
-                } else {
-                    //8 hour storm
-                    temperature+=" A sandstorm is raging outside. It will last for 8 hours.";
-                }
-                break;
-        }
-        
-        
-        var forecast=temperature;
-        state.Calendar.now.weather = forecast;
     },
     
     getmoon = function() {
